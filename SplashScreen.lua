@@ -5,16 +5,11 @@ local scene= storyboard.newScene()
 function scene:createScene(event)
     local group=self.view
     
-    local background = display.newImage( "menu_images/splash_screen_img.png")
+    local background = display.newImage( "menu_images/splash_screen_image.png")
     background.x=_W/2;
     background.y=_H/2
     group:insert(background);
-    
-    local logo = display.newImage( "menu_images/splash_logo.png")
-    logo.x=_W/2;
-    logo.y=_H/2
-    group:insert(logo);
-    
+        
 end
 
 function scene:willEnterScene( event )
