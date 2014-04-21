@@ -15,25 +15,18 @@ local initialAnimation
 --IMPORTANT
 function scene:createScene(event)
     local group=self.view
-    local background = display.newImageRect( "menu_images/menu_screen_bg.png",_W,_H)
+    local background = display.newImageRect( "menu_images/menu_screen_background.png",_W,_H)
     background.x=_W/2;
     background.y=_H/2
     
-    local birdImg = display.newImage( "menu_images/bird_img.png")
-    birdImg.x=_W-110;
-    birdImg.y=60
+    local birdImg = display.newImage( "menu_images/bird_1_img.png")
+    birdImg.x=_W/2-110;
+    birdImg.y=35
     
-    local scoreBg = display.newImage( "menu_images/score_board_bg.png")
-    scoreBg.x=(scoreBg.width/2)+10;
-    scoreBg.y=_H/2+20
     
-    local appName = display.newImage("menu_images/app_name_img.png")
-    appName.x=(appName.width/2)+10
-    appName.y=(appName.height/2)+10
-    
-    local labelScoreTxt= display.newText("High Scores: ", (scoreBg.width/2)+10, _H/2-70  , system.native, 12)
-    labelScoreTxt.x=(scoreBg.width/2)+10
-    labelScoreTxt.y=_H/2-35
+    local labelScoreTxt= display.newText("High Scores: ", _W/2, _H-110 , system.native, 12)
+    labelScoreTxt.x=_W/2
+    labelScoreTxt.y=_H-80
     labelScoreTxt:setTextColor(255,255,255)
     
         local highScores=getHighScore()
@@ -44,16 +37,15 @@ function scene:createScene(event)
     	HIGH_SCORE=highScores
     end
     
-    local highScoreTxt=display.newText(tostring(HIGH_SCORE), (scoreBg.width/2)+10, _H/2-30, system.native, 19)
-    highScoreTxt.x=(scoreBg.width/2)+10
-    highScoreTxt.y=_H/2-05  
-    highScoreTxt:setTextColor(255,191,53)
+    local highScoreTxt=display.newText(tostring(HIGH_SCORE), _W/2, _H/2-30, system.native, 19)
+    highScoreTxt.x=_W/2
+    highScoreTxt.y=_H-75+labelScoreTxt.height  
+    highScoreTxt:setTextColor(255,255,255)
     
-    local labelCoinsTxt= display.newText("Coins: ", (scoreBg.width/2)+10, _H/2-70  , system.native, 12)
-    labelCoinsTxt.x=(scoreBg.width/2)+10
-    labelCoinsTxt.y=_H/2+35
-    labelCoinsTxt:setTextColor(255,255,255)
+
+    
     local coinsValue=getCoinsCounts()
+    
     if(coinsValue==nil)then
    	 saveCoinsCounts(201)
     	AVAILABLE_COINS=200;
@@ -61,10 +53,16 @@ function scene:createScene(event)
     	AVAILABLE_COINS=tostring(coinsValue)
     end
     
-    local coinsTxt=display.newText(tostring(AVAILABLE_COINS), (scoreBg.width/2)+10, _H/2-30, system.native, 19)
-    coinsTxt.x=(scoreBg.width/2)+10
-    coinsTxt.y=_H/2+65  
-    coinsTxt:setTextColor(255,191,53)
+    local coinsTxt=display.newText(tostring(AVAILABLE_COINS), _W/2, _H/2-30, system.native, 19)
+    coinsTxt.x=_W/2
+    coinsTxt.y=_H-30 
+    coinsTxt:setTextColor(255,255,255)
+    
+    local labelCoinsImg= display.newImage( "menu_images/coins_icon.png")
+    labelCoinsImg.x=_W/2-(coinsTxt.width/2)-(labelCoinsImg.width/2)
+    labelCoinsImg.xScale=0.6
+    labelCoinsImg.yScale=0.6
+    labelCoinsImg.y=_H-30
     
     --background=display.newRect( 0 , 0, _W, _H )
     --background.x=_W/2;
@@ -72,9 +70,8 @@ function scene:createScene(event)
     --background:setFillColor ( 0,0 , 255 ,1 )
     
     playButton = display.newImage( "menu_images/play_btn.png")
-    local pointX=_W-(playButton.width/2)-25
-    playButton.x=pointX
-    playButton.y=_H/2-50
+    playButton.x=_W/2
+    playButton.y= 30+(playButton.height/2)
     playButton.alpha=0
     playButton.xScale=0.5
     playButton.yScale=0.5
@@ -82,16 +79,16 @@ function scene:createScene(event)
     
     
     highScoreButton = display.newImage( "menu_images/high_score_btn.png")
-    highScoreButton.x=pointX
-    highScoreButton.y=_H/2+20
+    highScoreButton.x=_W/2
+    highScoreButton.y=30+(playButton.height+highScoreButton.height/2)
     highScoreButton.alpha=0
     highScoreButton.xScale=0.5
     highScoreButton.yScale=0.5
     highScoreButton.filename="HighScoreScreen"
     
     howToPlayButton = display.newImage( "menu_images/how_to_play_btn.png")
-    howToPlayButton.x=pointX
-    howToPlayButton.y=_H/2+90
+    howToPlayButton.x=_W/2
+    howToPlayButton.y=30+(playButton.height+highScoreButton.height+howToPlayButton.height/2)
     howToPlayButton.alpha=0
     howToPlayButton.xScale=0.5
     howToPlayButton.yScale=0.5
@@ -99,12 +96,10 @@ function scene:createScene(event)
     
     group:insert(background);
     group:insert(birdImg);
-    group:insert(scoreBg);
     group:insert(labelScoreTxt);
     group:insert(highScoreTxt);
-    group:insert(labelCoinsTxt);
+    group:insert(labelCoinsImg);
     group:insert(coinsTxt);
-    group:insert(appName);
     group:insert(playButton);
     group:insert(highScoreButton);
     group:insert(howToPlayButton);
@@ -114,8 +109,6 @@ end
 --IMPORTANT
 function scene:willEnterScene( event )
     local group=self.view
-    
-    
     
 end
 
