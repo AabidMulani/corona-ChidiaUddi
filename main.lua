@@ -107,6 +107,7 @@ PAUSE_GAME_OVERLAY="none"
 GAME_OVER_OVERLAY="none"
 AVAILABLE_COINS = 200
 USED_LIFE_COUNT=0
+IS_SOUND_ON="true"
 PLATFORM_NAME = system.getInfo("platformName")
 local storyboard = require ( "storyboard" )
 storyboard.purgeOnSceneChange = true
@@ -163,6 +164,21 @@ function getCoinsCounts()
         return databaseBox.coinsCount
     else
         return nil 
+    end
+end
+
+function saveSoundSettings(flag)
+    print("saveSoundSettings")
+    databaseBox.soundSettings=tostring(flag)
+    databaseBox:save()
+end
+
+function getSoundSettings()
+    print("getSoundSettings")
+    if(databaseBox.soundSettings)then
+        return tostring(databaseBox.soundSettings)
+    else
+        return "true" 
     end
 end
 
