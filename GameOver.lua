@@ -29,7 +29,7 @@ function scene:enterScene( event )
          bgImg.y=_H/2
         group:insert(bgImg)
         
-	if(AVAILABLE_COINS<200)then
+	if(tonumber(AVAILABLE_COINS)<200)then
 		local coinsWidget=display.newText( group ,"Oops U R out off coins :(", _W/2, _H/2, system.native, 11)
 		coinsWidget.x=_W/2
 		coinsWidget.y=_H/2-20

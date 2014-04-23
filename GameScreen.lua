@@ -12,10 +12,11 @@ local currentFlyingObj=nil
 local isLifeAvailable
 local scoreTxt
 local coinsTxt
-local whiteLine1
+local baseProgressLine
 local progressLine1
 local lifeIcon
 local indicatorCircle
+local coinsLabel
 --refrence all methods
 local enterObject
 local gameOver
@@ -31,21 +32,46 @@ local function updateBackground()
     local bgImage=display.newImageRect ( group ,GAME_LEVELS[levelNumber][1] , _W, _H )
     bgImage.x=_W/2
     bgImage.y=_H/2
-    scoreTxt=display.newText( group, "Scores : "..currentScore, _W-10,10, system.native, 16 )
-    scoreTxt.x=_W-(scoreTxt.width-10)
-    scoreTxt.y=15
-    coinsTxt=display.newText( group, "Coins : "..currentCoinCount, 10,10, system.native, 16 )
-    coinsTxt.x=(coinsTxt.width+10)
+    
+    local lifeLabel=display.newText( group,"Life", 10,10, system.native, 11 )
+    lifeLabel.x=_W/2
+    lifeLabel.y=10
+    
+    local scoreLabel=display.newText( group,"Scores", 5,5, system.native, 11 )
+    scoreLabel:setTextColor ( 61, 29, 3)
+
+    scoreTxt=display.newText( group, tostring(currentScore), (scoreLabel.width/2)+5,scoreLabel.height+5, system.native, 12 )
+    scoreTxt.x= (scoreLabel.width/2)+5
+    scoreTxt:setTextColor ( 61, 29, 3)
+    
+    coinsTxt=display.newText( group, tostring(currentCoinCount), 10,10, system.native, 12 )
+    coinsTxt.x=_W-(coinsTxt.width+20)
     coinsTxt.y=15
-    whiteLine1=display.newLine( group ,0, 35, _W, 35)
-    whiteLine1:setStrokeColor ( 246, 244, 255)
-    progressLine1=display.newLine( group ,0, 35, 0, 35 )
-    progressLine1:setStrokeColor ( 255, 16, 37 )
+    coinsTxt:setTextColor ( 61, 29, 3)
+    
+    coinsLabel=display.newImage("menu_images/coins_icon.png")
+    coinsLabel.xScale=0.7
+    coinsLabel.yScale=0.7
+    coinsLabel.x=_W-(coinsTxt.width+(coinsLabel.width/2)+25)
+    coinsLabel.y=15
+    group:insert(coinsLabel)
+    
+    baseProgressLine=display.newImage("menu_images/progressBar_static.png", 10, 45)
+    group:insert(baseProgressLine)
+    
+    progressLine1=display.newImageRect("menu_images/progressBar_dynamic.png", 0, baseProgressLine.height )
+    progressLine1.anchorX=0
+    progressLine1.anchorY=0
+    progressLine1.x=10
+    progressLine1.y=45
+    group:insert(progressLine1)
+    
     if(levelNumber==1)then
-        lifeIcon=display.newImage("menu_images/life_icon_img.png")
-        lifeIcon.x=10+(lifeIcon.width/2)
-        lifeIcon.y=_H-(10+(lifeIcon.height/2))
+        lifeIcon=display.newImage("menu_images/life_icon.png")
+        lifeIcon.x=_W/2
+        lifeIcon.y=32
     end
+    
     if(isLifeAvailable)then
         if(lifeIcon.alpha==0)then
             transition.to(lifeIcon, {time = 800, alpha=1, xScale=1, yScale=1})
@@ -55,9 +81,8 @@ local function updateBackground()
     else
         lifeIcon.alpha=0   
     end
-    updateHighScore()
     group:insert(lifeIcon)
-    group:insert(progressLine1)
+    updateHighScore()
 end
 
 --update the score values and the bottom bar
@@ -66,29 +91,32 @@ local function updateScoreBoard()
     print ( "updateScoreBoard" )
     local value
     local majorValue
-    scoreTxt.text="Scores : " .. currentScore
+    scoreTxt.text=tostring(currentScore)
     if(levelNumber==1)then
         majorValue=GAME_LEVELS[levelNumber][2]
         value=majorValue-(majorValue-currentScore)
-        value=_W*(value/majorValue)
+        value=100*(value/majorValue)
     else
         majorValue=GAME_LEVELS[levelNumber][2]-GAME_LEVELS[levelNumber-1][2]
         value=majorValue-(GAME_LEVELS[levelNumber][2]-currentScore)
-        value=_W*(value/majorValue)
+        value=100*(value/majorValue)
     end
-    print ( value )
-    display.remove( indicatorCircle )
-    display.remove( progressLine1 )
-    progressLine1=display.newLine( group ,0, 35, value, 35 )
-    progressLine1:setStrokeColor ( 255, 16, 37 )
-    indicatorCircle=display.newCircle(group, value, 35, 3)
-    indicatorCircle:setFillColor(255, 16, 37)
+    print ( value/100 )
+    value=value/100
+    display.remove(progressLine1)
+    progressLine1=display.newImageRect("menu_images/progressBar_dynamic.png", baseProgressLine.width*value, baseProgressLine.height )
+    progressLine1.anchorX=0
+    progressLine1.anchorY=0
+    progressLine1.x=10+(baseProgressLine.width*value/2)
+    progressLine1.y=45+(baseProgressLine.height/2)
+    group:insert(progressLine1)
+    
 end
 
 --update the coin values
 local function updateCoinBoard(isIncremented)
     print ( "updateCoinBoard" )
-    if(tonumber(currentCoinCount)<=0)then
+    if(tonumber(currentCoinCount)<0)then
         --end game due to lack of coins
         isEndGame=true
         AVAILABLE_COINS=currentCoinCount
@@ -99,12 +127,13 @@ local function updateCoinBoard(isIncremented)
     else	
         if(isIncremented)then
             --show good animation
-            coinsTxt:setTextColor ( 99, 221, 0)
+            coinsTxt:setTextColor ( 61, 29, 3)
         else
             --show danger animation
             coinsTxt:setTextColor ( 245, 0, 25)
         end
-        coinsTxt.text="Coins : " .. currentCoinCount
+        coinsTxt.text=tostring(currentCoinCount)
+        coinsLabel.x=_W-(coinsTxt.width+(coinsLabel.width/2)+25)
     end
 end
 
