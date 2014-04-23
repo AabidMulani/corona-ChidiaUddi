@@ -94,11 +94,11 @@ FLYING_OBJECTS={
 --TABLE value's are  
 --{ background, maxObjCount, speed, background_audio}
 GAME_LEVELS={
-    {"menu_images/bg_level_2.png", 200, 4000, nil},
-    {"menu_images/bg_level_1.png", 500, 3200, nil},
-    {"menu_images/bg_level_0.png", 750, 2700, nil},
-    {"menu_images/bg_level_3.png", 900, 2200, nil},
-    {"menu_images/bg_level_4.png", 1000000, 1800, nil},	
+    {"menu_images/game_bg_2.png", 200, 4200, nil},
+    {"menu_images/game_bg_4.png", 500, 3200, nil},
+    {"menu_images/game_bg_3.png", 750, 2700, nil},
+    {"menu_images/game_bg_5.png", 900, 2500, nil},
+    {"menu_images/game_bg_1.png", 1000000, 2100, nil},	
 }
 
 USER_NAME="NoName"
@@ -107,6 +107,7 @@ PAUSE_GAME_OVERLAY="none"
 GAME_OVER_OVERLAY="none"
 AVAILABLE_COINS = 200
 USED_LIFE_COUNT=0
+IS_SOUND_ON="true"
 PLATFORM_NAME = system.getInfo("platformName")
 local storyboard = require ( "storyboard" )
 storyboard.purgeOnSceneChange = true
@@ -153,6 +154,9 @@ end
 
 function saveCoinsCounts(name)
     print("saveCoinsCounts")
+    if(tonumber(name)<0)then
+        name=0
+    end
     databaseBox.coinsCount=tostring(name)
     databaseBox:save()
 end
@@ -163,6 +167,21 @@ function getCoinsCounts()
         return databaseBox.coinsCount
     else
         return nil 
+    end
+end
+
+function saveSoundSettings(flag)
+    print("saveSoundSettings")
+    databaseBox.soundSettings=tostring(flag)
+    databaseBox:save()
+end
+
+function getSoundSettings()
+    print("getSoundSettings")
+    if(databaseBox.soundSettings)then
+        return tostring(databaseBox.soundSettings)
+    else
+        return "true" 
     end
 end
 
