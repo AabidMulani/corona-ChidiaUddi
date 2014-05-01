@@ -1,22 +1,78 @@
-local background
-local msgText
-local onBackClick
+local onButtonClick
 local storyboard= require ( "storyboard" )
 local scene= storyboard.newScene()
 
 function scene:createScene(event)
     local group=self.view
     
-    background = display.newImage( "menu_images/menu_screen_bg.png")
+    local background = display.newImage( "menu_images/how_to_play_background.png")
     background.x=_W/2
     background.y=_H/2
-    
-    msgText=display.newText( "How To Play is Under construction", 0, 0, "Helvetica", 22 )
-    msgText.x=_W/2;
-    msgText.y=_H/2
-    msgText:setTextColor(253, 244, 255)
     group:insert(background);
+    --  Century Gothic Bold  Comic Strip
+    local msgText=display.newText( "How To Play", 0, 0, "Comic Strip", 18 )
+    msgText.x=_W/2
+    msgText.y=20
+    msgText:setTextColor(61, 29, 3)
     group:insert(msgText);
+    
+    local mainMsgText=display.newText( "In this Game, Images will keep coming on your screen one by one, if \nthe object or character flies, swipe up on the screen, if it does’t\nthen swipe down. Simpe as it is !   ", 10, 40, "Century Gothic", 12 )
+    --    mainMsgText.anchorX=0
+    --    mainMsgText.anchorY=0
+    --    mainMsgText.x=10
+    --    mainMsgText.y=45
+    mainMsgText:setTextColor(61, 29, 3)
+    group:insert(mainMsgText);
+    
+    local tapMsg=display.newText( "Tap Play to start playing the game.", 10, 105, "Century Gothic", 12 )
+    tapMsg:setTextColor(61, 29, 3)
+    group:insert(tapMsg);
+    
+    local handsImg = display.newImage( "menu_images/how_to_play_hand_icon.png")
+    handsImg.x=_W/2
+    handsImg.y=_H/2+60
+    handsImg.xScale=0.9
+    handsImg.yScale=0.9
+    group:insert(handsImg);
+    
+    local cancelImg = display.newImage( "menu_images/back_btn.png")
+    cancelImg.x=cancelImg.width/4+10
+    cancelImg.y=_H-30
+    cancelImg.xScale=0.5
+    cancelImg.yScale=0.5
+    cancelImg:addEventListener("touch", onButtonClick)
+    cancelImg.filename="MenuScreen"
+    group:insert(cancelImg);
+    
+    local playImg = display.newImage( "menu_images/play_btn_2.png")
+    playImg.x=_W-playImg.width/4-10
+    playImg.y=_H-30
+    playImg.xScale=0.5
+    playImg.yScale=0.5
+    playImg:addEventListener("touch", onButtonClick)
+    playImg.filename="GameScreen"
+    group:insert(playImg);
+    
+    
+end
+
+function onButtonClick( event)
+    local obj= event.target
+    print ( obj.filename)
+    obj.alpha=0.8
+    obj.xScale=0.3
+    obj.yScale=0.3
+    
+    if(event.phase == "moved"  or event.phase == "ended"  )then
+        obj.alpha=1
+        obj.xScale=0.5
+        obj.yScale=0.5
+        if(event.phase == "ended" )then
+            --call another screen
+            options = {effect = "fade",time=300 }
+            storyboard.gotoScene(obj.filename,options)
+        end
+    end
 end
 
 function scene:willEnterScene( event )
@@ -27,7 +83,7 @@ end
 
 function scene:enterScene( event )
     local group=self.view
-Runtime:addEventListener( "key", onKeyEvent );
+--    Runtime:addEventListener( "key", onKeyEvent );
     
 end
 
@@ -38,7 +94,7 @@ end
 
 function scene:didExitScene( event )
     local group=self.view
-
+    
     storyboard.removeScene("HowToPlayScreen");
 end
 
