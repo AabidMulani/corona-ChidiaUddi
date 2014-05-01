@@ -36,7 +36,7 @@ function scene:enterScene( event )
 --    bgImg.y=_H/2
 --    group:insert(bgImg)
     
-    local msgText=display.newText( group,"Are you sure you want to exit the game ?", 5,5, "Comic Strip", 21 )
+    local msgText=display.newText( group,"Are you sure you want\nto exit the game ?", 5,5, "Comic Strip", 21 )
     msgText:setTextColor ( 61, 29, 3)
     msgText.x=_W/2
     msgText.y=_H/2-60
