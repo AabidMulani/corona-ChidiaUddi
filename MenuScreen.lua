@@ -59,7 +59,7 @@ function scene:createScene(event)
     group:insert(coinsTxt);
     
     local labelCoinsImg= display.newImage( "menu_images/coins_icon.png")
-    labelCoinsImg.x=_W/2-(coinsTxt.width/2)-(labelCoinsImg.width/2)
+    labelCoinsImg.x=_W/2-(coinsTxt.width/2)-(labelCoinsImg.width/2)-5
     labelCoinsImg.xScale=0.6
     labelCoinsImg.yScale=0.6
     labelCoinsImg.y=_H-30

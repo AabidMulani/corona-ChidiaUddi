@@ -39,7 +39,7 @@ local function updateBackground()
     
     local scoreLabel=display.newText( group,"Scores", 5,5, system.native, 11 )
     scoreLabel:setTextColor ( 61, 29, 3)
-
+    
     scoreTxt=display.newText( group, tostring(currentScore), (scoreLabel.width/2)+5,scoreLabel.height+5, system.native, 12 )
     scoreTxt.x= (scoreLabel.width/2)+5
     scoreTxt:setTextColor ( 61, 29, 3)
@@ -230,6 +230,7 @@ local function startOrResumeGame()
                 return ((_H-currentFlyingObj.y-35)/_H)*100
             end
         end
+        acceptNextSlide=true;
         currentFlyingObj.trans= transition.to ( currentFlyingObj, { x=0, y=_H/2, time=GAME_LEVELS[levelNumber][3]*computeRemainigDistance(), onComplete=objectMissed } )   
     else		
         --do start game initialization
@@ -332,6 +333,7 @@ end
 --when slide is done in Up or Down direction
 local function computeSlide(isUpside)
     print ( "computeSlide" )
+    acceptNextSlide=false
     if(currentFlyingObj==nil)then
     else
         transition.cancel ( currentFlyingObj.trans )
@@ -441,6 +443,7 @@ end
 function scene:overlayBegan( event )
     print ( "scene:overlayBegan" )
     local group=self.view
+    acceptNextSlide=false
     if(isEndGame)then
         
     else
@@ -460,7 +463,8 @@ function scene:overlayEnded( event )
             Runtime:addEventListener ( "key", onKeyEvent )
             Runtime:addEventListener ( "touch", onSlideEventDone )
             gamePaused=false
-            startOrResumeGame()
+--            startOrResumeGame()
+            startCountDown()
         else 
             if (GAME_OVER_OVERLAY=="coins")then
                 Runtime:addEventListener ( "key", onKeyEvent )
