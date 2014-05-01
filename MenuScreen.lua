@@ -1,4 +1,4 @@
-
+local onKeyEvent
 local playButton
 local highScoreButton
 local howToPlayButton
@@ -7,6 +7,24 @@ local storyboard= require ( "storyboard" )
 local scene= storyboard.newScene()
 local onButtonClick
 local initialAnimation
+
+audio.reserveChannels(2)
+
+local function playStreamSound()
+    if(IS_SOUND_ON=="true")then
+        audio.play(SOUND_STREAM_MENU, {channel = 1})
+        audio.setVolume(1, {channel = 1})
+        audio.setVolume(5, {channel = 2})
+    else
+        audio.stop(1)
+    end
+end
+
+local function playClickSound()
+    if(IS_SOUND_ON=="true")then
+        audio.play(SOUND_BUTTON_CLICK, {channel = 2})
+    end
+end
 
 function scene:createScene(event)
     local group=self.view
@@ -108,6 +126,7 @@ function scene:createScene(event)
         soundsButton.x=15+(soundsButton.width/2)
         soundsButton.y=15+(soundsButton.width/2)
         soundsButton:addEventListener ( "tap", onSoundChange )
+        playStreamSound()
         group:insert(soundsButton);
     end
     
@@ -119,6 +138,7 @@ function scene:createScene(event)
         soundsButton = display.newImage( "menu_images/sound_off_btn.png")
     end
     
+   
     soundsButton.x=15+(soundsButton.width/2)
     soundsButton.y=15+(soundsButton.width/2)
     soundsButton:addEventListener ( "tap", onSoundChange )
@@ -144,7 +164,7 @@ function scene:enterScene( event )
     	USER_NAME=userName
     end
     
-    
+    playStreamSound()
     
     Runtime:addEventListener( "key", onKeyEvent );
     initialAnimation()
@@ -239,8 +259,9 @@ function onButtonClick( event)
         obj.yScale=1
         if(event.phase == "ended" )then
             --call another screen
-            
-            options = {effect = "fade",time=300 }
+            playClickSound()
+            audio.fadeOut({time = 500})
+            audio.stopWithDelay(501, {channel = 1})
             storyboard.gotoScene(obj.filename,options)
         end
     end
