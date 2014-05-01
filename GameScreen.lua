@@ -33,18 +33,18 @@ local function updateBackground()
     bgImage.x=_W/2
     bgImage.y=_H/2
     
-    local lifeLabel=display.newText( group,"Life", 10,10, system.native, 11 )
+    local lifeLabel=display.newText( group,"Life", 10,10, "Century Gothic Bold", 11 )
     lifeLabel.x=_W/2
     lifeLabel.y=10
     
-    local scoreLabel=display.newText( group,"Scores", 5,5, system.native, 11 )
+    local scoreLabel=display.newText( group,"Scores", 5,5, "Century Gothic Bold", 11 )
     scoreLabel:setTextColor ( 61, 29, 3)
     
-    scoreTxt=display.newText( group, tostring(currentScore), (scoreLabel.width/2)+5,scoreLabel.height+5, system.native, 12 )
+    scoreTxt=display.newText( group, tostring(currentScore), (scoreLabel.width/2)+5,scoreLabel.height+5, "Century Gothic Bold", 12 )
     scoreTxt.x= (scoreLabel.width/2)+5
     scoreTxt:setTextColor ( 61, 29, 3)
     
-    coinsTxt=display.newText( group, tostring(currentCoinCount), 10,10, system.native, 12 )
+    coinsTxt=display.newText( group, tostring(currentCoinCount), 10,10, "Century Gothic Bold", 12 )
     coinsTxt.x=_W-(coinsTxt.width+20)
     coinsTxt.y=15
     coinsTxt:setTextColor ( 61, 29, 3)
@@ -270,7 +270,7 @@ local function startCountDown()
         
     end
     timer.performWithDelay ( 800, onCounterChange,3 )
-    counterText=display.newText( group, counterValue, _W/2, _H/2, system.nativeFont, 24 )
+    counterText=display.newText( group, counterValue, _W/2, _H/2, "Century Gothic Bold", 24 )
     counterText:setTextColor(255, 229, 51)
 end
 

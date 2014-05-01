@@ -21,7 +21,7 @@ function scene:createScene(event)
     group:insert(birdImg);
     
     
-    local labelScoreTxt= display.newText("High Scores: ", _W/2, _H-110 , system.native, 12)
+    local labelScoreTxt= display.newText("High Scores: ", _W/2, _H-110 , "Century Gothic Bold Italic", 12)
     labelScoreTxt.x=_W/2
     labelScoreTxt.y=_H-80
     labelScoreTxt:setTextColor(255,255,255)
@@ -35,7 +35,7 @@ function scene:createScene(event)
     	HIGH_SCORE=highScores
     end
     
-    local highScoreTxt=display.newText(tostring(HIGH_SCORE), _W/2, _H/2-30, system.native, 19)
+    local highScoreTxt=display.newText(tostring(HIGH_SCORE), _W/2, _H/2-30,"Century Gothic Bold Italic", 19)
     highScoreTxt.x=_W/2
     highScoreTxt.y=_H-75+labelScoreTxt.height  
     highScoreTxt:setTextColor(255,255,255)
@@ -52,7 +52,7 @@ function scene:createScene(event)
     	AVAILABLE_COINS=tostring(coinsValue)
     end
     
-    local coinsTxt=display.newText(tostring(AVAILABLE_COINS), _W/2, _H/2-30, system.native, 19)
+    local coinsTxt=display.newText(tostring(AVAILABLE_COINS), _W/2, _H/2-30, "Century Gothic Bold Italic", 19)
     coinsTxt.x=_W/2
     coinsTxt.y=_H-30 
     coinsTxt:setTextColor(255,255,255)
@@ -251,7 +251,6 @@ end
 
 
 scene:addEventListener ( "createScene", scene )
-
 scene:addEventListener ( "willEnterScene", scene )
 scene:addEventListener ( "enterScene", scene )
 scene:addEventListener ( "exitScene", scene )

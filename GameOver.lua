@@ -38,10 +38,14 @@ function scene:enterScene( event )
     end
     
     if(tonumber(AVAILABLE_COINS)<200)then
-        local coinsWidget=display.newImage("menu_images/oops_msg.png", _W/2, _H/2)
-        coinsWidget.x=_W/2
-        coinsWidget.y=_H/2-60
-        group:insert(coinsWidget)
+--        local coinsWidget=display.newImage("menu_images/oops_msg.png", _W/2, _H/2)
+--        coinsWidget.x=_W/2
+--        coinsWidget.y=_H/2-60
+--        group:insert(coinsWidget)
+    local msgText=display.newText( group,"OOPS! YOU ARE OUT OF COINS", 5,5, "Comic Strip", 22 )
+    msgText:setTextColor ( 61, 29, 3)
+    msgText.x=_W/2
+    msgText.y=_H/2-60
     else
         local useLife=display.newImage("menu_images/save_me_button.png", _W/2, _H/2)
         useLife.x=_W/2
