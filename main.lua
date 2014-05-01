@@ -101,6 +101,15 @@ GAME_LEVELS={
     {"menu_images/game_bg_1.png", 1000000, 2100, nil},	
 }
 
+SOUND_BUTTON_CLICK=audio.loadSound("audio/click_sound.mp3")
+SOUND_CORRECT_SWIPE=audio.loadSound("audio/correct_sound.mp3")
+SOUND_WRONG_SWIPE=audio.loadSound("audio/wrong_sound.mp3")
+SOUND_COUNT_DOWN=audio.loadSound("audio/countdown_sound.mp3")
+SOUND_END_GAME=audio.loadSound("audio/end_game.mp3")
+
+SOUND_STREAM_GAME=audio.loadStream("audio/game_sound_dummy.mp3")
+SOUND_STREAM_MENU=audio.loadStream("audio/menu_sound_dummy.mp3")
+
 USER_NAME="NoName"
 HIGH_SCORE=150
 PAUSE_GAME_OVERLAY="none"
@@ -111,9 +120,10 @@ IS_SOUND_ON="true"
 PLATFORM_NAME = system.getInfo("platformName")
 local storyboard = require ( "storyboard" )
 storyboard.purgeOnSceneChange = true
+
 local options = {
     effect = "fade",
-    time=800,
+    time=600,
     params = {var1 = "custom", myVar= "another"}
 }
 

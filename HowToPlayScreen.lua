@@ -2,6 +2,25 @@ local onButtonClick
 local storyboard= require ( "storyboard" )
 local scene= storyboard.newScene()
 
+
+audio.reserveChannels(2)
+
+local function playStreamSound()
+    if(IS_SOUND_ON=="true")then
+        audio.play(SOUND_STREAM_MENU, {channel = 1})
+        audio.setVolume(1, {channel = 1})
+        audio.setVolume(5, {channel = 2})
+    else
+        audio.stop(1)
+    end
+end
+
+local function playClickSound()
+    if(IS_SOUND_ON=="true")then
+        audio.play(SOUND_BUTTON_CLICK, {channel = 2})
+    end
+end
+
 function scene:createScene(event)
     local group=self.view
     
@@ -69,7 +88,10 @@ function onButtonClick( event)
         obj.yScale=0.5
         if(event.phase == "ended" )then
             --call another screen
-            options = {effect = "fade",time=300 }
+            playClickSound()
+            audio.fadeOut({time = 500})
+            audio.stopWithDelay(501, {channel = 1})
+            options = {effect = "fade",time=500 }
             storyboard.gotoScene(obj.filename,options)
         end
     end
@@ -83,13 +105,12 @@ end
 
 function scene:enterScene( event )
     local group=self.view
---    Runtime:addEventListener( "key", onKeyEvent );
-    
+    --    Runtime:addEventListener( "key", onKeyEvent );
+    playStreamSound()
 end
 
 function scene:exitScene( event )
     local group=self.view
-    
 end
 
 function scene:didExitScene( event )
@@ -120,8 +141,9 @@ end
 local function onKeyEvent( event )
     
     if(event.phase == "down" and event.keyName == "back") then
-        options = {effect = "fade",time=300 }
-    	
+    	playClickSound()
+        audio.fadeOut({time = 500})
+        audio.stopWithDelay(501, {channel = 1})
     	Runtime:removeEventListener ( "key", onKeyEvent )
         storyboard.gotoScene("MenuScreen",options)
         

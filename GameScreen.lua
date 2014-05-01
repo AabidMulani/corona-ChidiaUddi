@@ -25,6 +25,38 @@ local onKeyEvent
 local acceptNextSlide=true
 local updateHighScore
 local transitionType
+
+
+audio.reserveChannels(2)
+
+local function playStreamSound()
+    if(IS_SOUND_ON=="true")then
+        audio.play(SOUND_STREAM_GAME, {channel = 1})
+        audio.setVolume(1, {channel = 1})
+        audio.setVolume(5, {channel = 2})
+    end
+end
+
+local function playThisSound(soundType)
+    if(IS_SOUND_ON=="true")then
+        if(soundType=="click")then
+            audio.play(SOUND_BUTTON_CLICK, {channel = 2})            
+        end
+        if(soundType=="correct")then
+            audio.play(SOUND_CORRECT_SWIPE, {channel = 2})            
+        end
+        if(soundType=="countDown")then
+            audio.play(SOUND_COUNT_DOWN, {channel = 2})            
+        end
+        if(soundType=="wrong")then
+            audio.play(SOUND_WRONG_SWIPE, {channel = 2})            
+        end
+        if(soundType=="endGame")then
+            audio.play(SOUND_END_GAME, {channel = 2})            
+        end
+    end
+end
+
 -- grab the current Level and set corresponding background
 local function updateBackground()
     print ( "updateBackground" )
@@ -142,6 +174,7 @@ local function objectMissed()
     print ( "objectMissed" )
     currentCoinCount=currentCoinCount-1
     display.remove(currentFlyingObj)
+    playThisSound("wrong")
     if(currentCoinCount>=0)then
         enterObject()
     end
@@ -214,6 +247,7 @@ end
 --start or resume game
 local function startOrResumeGame()
     print ( "startOrResumeGame" )
+    playStreamSound()
     if(gamePaused)then
         --do resume game initialization
         local function computeRemainigDistance()
@@ -258,7 +292,7 @@ local function startCountDown()
         print ( "onCounterChange" )
 	
         counterValue=counterValue-1
-	
+	playThisSound("countDown")
         if(counterValue==0)then
             display.remove( counterText )    
             Runtime:addEventListener( "key", onKeyEvent );
@@ -286,6 +320,7 @@ local function computeWrongAnswer()
             lifeIcon.yScale=1
             enterObject()
         end
+        playThisSound("wrong")
         --Animate when wrong answer
         transition.to(currentFlyingObj, {time = 800, y=_H-50 ,alpha=0, transition = easing.outQuad})
         transition.to(lifeIcon, {time = 500, alpha=0, xScale=0, yScale=0, rotation=360})
@@ -295,6 +330,7 @@ local function computeWrongAnswer()
         display.remove(currentFlyingObj)
         acceptNextSlide=false
         isEndGame=true
+        playThisSound("endGame")
         AVAILABLE_COINS=currentCoinCount
         Runtime:removeEventListener ( "key", onKeyEvent );
         Runtime:removeEventListener ( "touch", onSlideEventDone )
@@ -344,6 +380,7 @@ local function computeSlide(isUpside)
         else
             --play good sound
             --audio.play(correctSound)
+            playThisSound("correct")
             computeCorrectAnswer()
         end
     end
@@ -386,6 +423,7 @@ end
 --when back button is clicked
 local function onPause()
     print ( "Back Pressed" )
+    playThisSound("click")
     Runtime:removeEventListener ( "key", onKeyEvent );
     Runtime:removeEventListener ( "touch", onSlideEventDone )
     transition.cancel ( currentFlyingObj.trans )
@@ -397,7 +435,7 @@ end
 function scene:createScene(event)
     print ( "scene:createScene" )
     local group=self.view
-    
+    audio.rewind(SOUND_STREAM_MENU)
 end
 
 function scene:enterScene( event )
@@ -444,6 +482,10 @@ function scene:overlayBegan( event )
     print ( "scene:overlayBegan" )
     local group=self.view
     acceptNextSlide=false
+    
+    audio.fadeOut({time = 500})
+    audio.stopWithDelay(501, {channel = 1})
+    
     if(isEndGame)then
         
     else
@@ -463,7 +505,8 @@ function scene:overlayEnded( event )
             Runtime:addEventListener ( "key", onKeyEvent )
             Runtime:addEventListener ( "touch", onSlideEventDone )
             gamePaused=false
---            startOrResumeGame()
+            audio.rewind(SOUND_STREAM_MENU)
+            --            startOrResumeGame()
             startCountDown()
         else 
             if (GAME_OVER_OVERLAY=="coins")then
@@ -474,9 +517,10 @@ function scene:overlayEnded( event )
                 updateScoreBoard()
                 GAME_OVER_OVERLAY="none"
                 enterObject()
+                playStreamSound()
             else
                 display.remove(lifeIcon)
-                options = {effect = "fade",time=300 }
+                options = {effect = "fade",time=600 }
                 storyboard.gotoScene("MenuScreen",options)
             end
         end
@@ -486,10 +530,9 @@ function scene:overlayEnded( event )
             Runtime:addEventListener ( "touch", onSlideEventDone )
             gamePaused=true
             startOrResumeGame()
-            
         else
             display.remove(lifeIcon)
-            options = {effect = "fade",time=300 }
+            options = {effect = "fade",time=600 }
             storyboard.gotoScene("MenuScreen",options)
         end
         
@@ -558,7 +601,6 @@ end
 
 -- Add the key callback
 scene:addEventListener ( "createScene", scene )
-
 scene:addEventListener ( "willEnterScene", scene )
 scene:addEventListener ( "enterScene", scene )
 scene:addEventListener ( "exitScene", scene )

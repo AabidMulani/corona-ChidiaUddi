@@ -2,6 +2,13 @@
 local storyboard= require ( "storyboard" )
 local scene= storyboard.newScene()
 
+
+local function playClickSound()
+    if(IS_SOUND_ON=="true")then
+        audio.play(SOUND_BUTTON_CLICK)
+    end
+end
+
 function scene:createScene(event)
     local group=self.view
 end
@@ -25,6 +32,7 @@ function scene:enterScene( event )
             obj.yScale=1
             if(event.phase == "ended" )then
                 --call another screen
+                playClickSound()
                 PAUSE_GAME_OVERLAY=obj.value
                 storyboard.hideOverlay("fromTop")
             end
@@ -91,7 +99,7 @@ end
 -- Key listener
 local function onKeyEvent( event )
     print ( "onKeyEvent" )
-    
+    playClickSound()
 end
 
 -- Add the key callback
