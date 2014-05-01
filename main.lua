@@ -111,12 +111,19 @@ SOUND_STREAM_GAME=audio.loadStream("audio/game_sound_dummy.mp3")
 SOUND_STREAM_MENU=audio.loadStream("audio/menu_sound_dummy.mp3")
 
 USER_NAME="NoName"
-HIGH_SCORE=150
+HIGH_SCORE=0
 PAUSE_GAME_OVERLAY="none"
 GAME_OVER_OVERLAY="none"
 AVAILABLE_COINS = 200
 USED_LIFE_COUNT=0
 IS_SOUND_ON="true"
+
+HIGH_SCORE_1 = 0
+HIGH_SCORE_2 = 0
+HIGH_SCORE_3 = 0
+HIGH_SCORE_4 = 0
+HIGH_SCORE_5 = 0
+
 PLATFORM_NAME = system.getInfo("platformName")
 local storyboard = require ( "storyboard" )
 storyboard.purgeOnSceneChange = true
@@ -149,12 +156,89 @@ end
 
 function saveHighScore(score)
     print("saveHighScore")
-    databaseBox.highScore=tostring(score)
+    local numScore=tonumber(score)
+    if(numScore==0)then
+        return
+    end
+    if(HIGH_SCORE_1)then
+        if(tonumber(HIGH_SCORE_1)>numScore)then
+            if(HIGH_SCORE_2)then
+                if(tonumber(HIGH_SCORE_2)>numScore)then
+                    if(HIGH_SCORE_3)then
+                        if(tonumber(HIGH_SCORE_3)>numScore)then
+                            if(HIGH_SCORE_4)then
+                                if(tonumber(HIGH_SCORE_4)>numScore)then
+                                    if(HIGH_SCORE_5)then
+                                        if(tonumber(HIGH_SCORE_5)<numScore)then
+                                            databaseBox.highScore_5=tostring(score)                                             
+                                        end
+                                    else 
+                                        databaseBox.highScore_5=tostring(score) 
+                                    end
+                                else
+                                    databaseBox.highScore_4=tostring(score)
+                                    databaseBox.highScore_5=HIGH_SCORE_4
+                                end
+                            else
+                                databaseBox.highScore_4=tostring(score)  
+                            end
+                        else
+                            databaseBox.highScore_3=tostring(score)
+                            databaseBox.highScore_4=HIGH_SCORE_3
+                            databaseBox.highScore_5=HIGH_SCORE_4
+                        end
+                    else
+                        databaseBox.highScore_3=tostring(score)                        
+                    end
+                else
+                    databaseBox.highScore_2=tostring(score)
+                    databaseBox.highScore_3=HIGH_SCORE_2
+                    databaseBox.highScore_4=HIGH_SCORE_3
+                    databaseBox.highScore_5=HIGH_SCORE_4
+                end            
+            else
+                databaseBox.highScore_2=tostring(score)
+            end
+        else
+            databaseBox.highScore_1=tostring(score)
+            databaseBox.highScore_2=HIGH_SCORE_1
+            databaseBox.highScore_3=HIGH_SCORE_2
+            databaseBox.highScore_4=HIGH_SCORE_3
+            databaseBox.highScore_5=HIGH_SCORE_4
+        end
+    else
+        databaseBox.highScore_1=tostring(score)
+    end
     databaseBox:save()
 end
 
 function getHighScore()
     print("getHighScore")
+    HIGH_SCORE_1=databaseBox.highScore_1    
+    if(HIGH_SCORE_1)then
+        print("HIGH_SCORE_1 ="..HIGH_SCORE_1)
+    end
+    
+    HIGH_SCORE_2=databaseBox.highScore_2    
+    if(HIGH_SCORE_2)then
+        print("HIGH_SCORE_2 ="..HIGH_SCORE_2)
+    end
+    
+    HIGH_SCORE_3=databaseBox.highScore_3    
+    if(HIGH_SCORE_3)then
+        print("HIGH_SCORE_3 ="..HIGH_SCORE_3)
+    end
+    
+    HIGH_SCORE_4=databaseBox.highScore_4    
+    if(HIGH_SCORE_4)then
+        print("HIGH_SCORE_4 ="..HIGH_SCORE_4)
+    end
+    
+    HIGH_SCORE_5=databaseBox.highScore_5
+    if(HIGH_SCORE_5)then
+        print("HIGH_SCORE_5 ="..HIGH_SCORE_5)
+    end
+    
     if(databaseBox.highScore)then
         return databaseBox.highScore
     else

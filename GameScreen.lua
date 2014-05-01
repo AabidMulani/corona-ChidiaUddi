@@ -505,7 +505,7 @@ function scene:overlayEnded( event )
             Runtime:addEventListener ( "key", onKeyEvent )
             Runtime:addEventListener ( "touch", onSlideEventDone )
             gamePaused=false
-            audio.rewind(SOUND_STREAM_MENU)
+            audio.rewind(SOUND_STREAM_GAME)
             --            startOrResumeGame()
             startCountDown()
         else 
@@ -519,7 +519,8 @@ function scene:overlayEnded( event )
                 enterObject()
                 playStreamSound()
             else
-                display.remove(lifeIcon)
+                display.remove(lifeIcon)                
+            audio.rewind(SOUND_STREAM_GAME)
                 options = {effect = "fade",time=600 }
                 storyboard.gotoScene("MenuScreen",options)
             end
@@ -532,6 +533,7 @@ function scene:overlayEnded( event )
             startOrResumeGame()
         else
             display.remove(lifeIcon)
+            audio.rewind(SOUND_STREAM_GAME)
             options = {effect = "fade",time=600 }
             storyboard.gotoScene("MenuScreen",options)
         end
@@ -554,9 +556,9 @@ function updateHighScore()
     print("updateHighScore")
     AVAILABLE_COINS=currentCoinCount;
     saveCoinsCounts(currentCoinCount)
+    saveHighScore(currentScore)
     if(currentScore>tonumber(HIGH_SCORE))then
         HIGH_SCORE=tostring(currentScore)
-        saveHighScore(currentScore)
     end
 end
 
