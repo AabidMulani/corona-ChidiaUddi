@@ -94,11 +94,26 @@ FLYING_OBJECTS={
 --TABLE value's are  
 --{ background, maxObjCount, speed, background_audio}
 GAME_LEVELS={
-    {"menu_images/game_bg_2.png", 200, 4200, nil},
-    {"menu_images/game_bg_4.png", 500, 3200, nil},
-    {"menu_images/game_bg_3.png", 750, 2700, nil},
-    {"menu_images/game_bg_5.png", 900, 2500, nil},
-    {"menu_images/game_bg_1.png", 1000000, 2100, nil},	
+    {"menu_images/game_bg_2.png", 500, 4200, nil},
+    {"menu_images/game_bg_4.png", 1000,3800, nil},
+    {"menu_images/game_bg_3.png", 1750, 3400, nil},
+    {"menu_images/game_bg_5.png", 2750, 3000, nil},
+    {"menu_images/game_bg_3.png", 4000, 2600, nil},	
+    {"menu_images/game_bg_2.png", 5500, 2400, nil},
+    {"menu_images/game_bg_4.png", 7250, 2300, nil},
+    {"menu_images/game_bg_3.png", 11500, 2200, nil},
+    {"menu_images/game_bg_5.png", 14000, 2100, nil},
+    {"menu_images/game_bg_2.png", 16750, 2000, nil},	
+    {"menu_images/game_bg_1.png", 19750, 1900, nil},
+    {"menu_images/game_bg_4.png", 23250, 1800, nil},
+    {"menu_images/game_bg_3.png", 27250, 1700, nil},
+    {"menu_images/game_bg_5.png", 33000, 1600, nil},
+    {"menu_images/game_bg_2.png", 43000, 1500, nil},	
+    {"menu_images/game_bg_3.png", 54000, 1400, nil},
+    {"menu_images/game_bg_1.png", 65000, 1300, nil},
+    {"menu_images/game_bg_3.png", 77000, 1200, nil},
+    {"menu_images/game_bg_2.png", 88000, 1100, nil},
+    {"menu_images/game_bg_5.png", 100000, 1000, nil},	
 }
 
 SOUND_BUTTON_CLICK=audio.loadSound("audio/click_sound.mp3")
@@ -239,8 +254,8 @@ function getHighScore()
         print("HIGH_SCORE_5 ="..HIGH_SCORE_5)
     end
     
-    if(databaseBox.highScore)then
-        return databaseBox.highScore
+    if(HIGH_SCORE_1)then
+        return HIGH_SCORE_1
     else
         return nil 
     end

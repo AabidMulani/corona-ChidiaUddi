@@ -165,7 +165,7 @@ local function updateCoinBoard(isIncremented)
             coinsTxt:setTextColor ( 245, 0, 25)
         end
         coinsTxt.text=tostring(currentCoinCount)
-        coinsLabel.x=_W-(coinsTxt.width+(coinsLabel.width/2)+25)
+        coinsLabel.x=_W-(coinsTxt.width+(coinsLabel.width/2)+30)
     end
 end
 
@@ -208,7 +208,7 @@ local function generateTransition(tType,tTime)
         trans=transition.to ( currentFlyingObj, { x=_W/2, y=_H, time=tTime, onComplete=objectMissed } )
     end
     
-    if(tType==4 and tType==5)then
+    if(tType>=4)then
         currentFlyingObj.x=_W/2
         currentFlyingObj.y=_H
         trans=transition.to ( currentFlyingObj, { x=_W/2, y=35, time=tTime, onComplete=objectMissed } )
@@ -506,8 +506,8 @@ function scene:overlayEnded( event )
             Runtime:addEventListener ( "touch", onSlideEventDone )
             gamePaused=false
             audio.rewind(SOUND_STREAM_GAME)
-            --            startOrResumeGame()
-            startCountDown()
+            startOrResumeGame()
+            --            startCountDown()
         else 
             if (GAME_OVER_OVERLAY=="coins")then
                 Runtime:addEventListener ( "key", onKeyEvent )
@@ -520,7 +520,7 @@ function scene:overlayEnded( event )
                 playStreamSound()
             else
                 display.remove(lifeIcon)                
-            audio.rewind(SOUND_STREAM_GAME)
+                audio.rewind(SOUND_STREAM_GAME)
                 options = {effect = "fade",time=600 }
                 storyboard.gotoScene("MenuScreen",options)
             end
