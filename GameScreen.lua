@@ -31,9 +31,12 @@ audio.reserveChannels(2)
 
 local function playStreamSound()
     if(IS_SOUND_ON=="true")then
-        audio.play(SOUND_STREAM_GAME, {channel = 1})
-        audio.setVolume(1, {channel = 1})
-        audio.setVolume(5, {channel = 2})
+        local function resetMusic()
+            audio.rewind(GAME_LEVELS[levelNumber][4])
+        end
+        audio.play(GAME_LEVELS[levelNumber][4], {channel = 1 , loops=-1,onComplete=resetMusic})
+        audio.setVolume(5, {channel = 1})
+        audio.setVolume(10, {channel = 2})
     end
 end
 
@@ -64,22 +67,21 @@ local function updateBackground()
     local bgImage=display.newImageRect ( group ,GAME_LEVELS[levelNumber][1] , _W, _H )
     bgImage.x=_W/2
     bgImage.y=_H/2
-    
     local lifeLabel=display.newText( group,"Life", 10,10, "Century Gothic Bold", 11 )
     lifeLabel.x=_W/2
     lifeLabel.y=10
     
     local scoreLabel=display.newText( group,"Scores", 5,5, "Century Gothic Bold", 11 )
-    scoreLabel:setTextColor ( 61, 29, 3)
+    scoreLabel:setTextColor (  255, 204, 0)
     
     scoreTxt=display.newText( group, tostring(currentScore), (scoreLabel.width/2)+5,scoreLabel.height+5, "Century Gothic Bold", 12 )
     scoreTxt.x= (scoreLabel.width/2)+5
-    scoreTxt:setTextColor ( 61, 29, 3)
+    scoreTxt:setTextColor (  255, 204, 0)
     
     coinsTxt=display.newText( group, tostring(currentCoinCount), 10,10, "Century Gothic Bold", 12 )
     coinsTxt.x=_W-(coinsTxt.width+20)
     coinsTxt.y=15
-    coinsTxt:setTextColor ( 61, 29, 3)
+    coinsTxt:setTextColor ( 255, 204, 0)
     
     coinsLabel=display.newImage("menu_images/coins_icon.png")
     coinsLabel.xScale=0.7
@@ -159,10 +161,14 @@ local function updateCoinBoard(isIncremented)
     else	
         if(isIncremented)then
             --show good animation
-            coinsTxt:setTextColor ( 61, 29, 3)
+            coinsTxt:setTextColor (  255, 204, 0)
         else
             --show danger animation
             coinsTxt:setTextColor ( 245, 0, 25)
+            coinsTxt.xScale=1.8            
+            coinsTxt.yScale=1.8         
+            coinsTxt.alpha=0.4
+            transition.to ( coinsTxt, { alpha = 1, xScale = 1, yScale = 1, time=800, onComplete=objectMissed } )
         end
         coinsTxt.text=tostring(currentCoinCount)
         coinsLabel.x=_W-(coinsTxt.width+(coinsLabel.width/2)+30)
@@ -172,7 +178,7 @@ end
 --when object is missed
 local function objectMissed()
     print ( "objectMissed" )
-    currentCoinCount=currentCoinCount-1
+    currentCoinCount=currentCoinCount-5
     display.remove(currentFlyingObj)
     playThisSound("wrong")
     if(currentCoinCount>=0)then
@@ -188,6 +194,35 @@ local function computeNewObject()
 end
 
 local function generateTransition(tType,tTime)
+    local trans
+    transitionType = tType
+    if(tType==1)then
+        currentFlyingObj.x=_W
+        currentFlyingObj.y=_H/2
+        trans=transition.to ( currentFlyingObj, { x=0, y=_H/2, time=tTime, onComplete=objectMissed } )
+    end
+    
+    if(tType==2)then
+        currentFlyingObj.x=0
+        currentFlyingObj.y=_H/2
+        trans=transition.to ( currentFlyingObj, { x=_W, y=_H/2, time=tTime, onComplete=objectMissed } )
+    end
+    
+    if(tType==3)then
+        currentFlyingObj.x=_W/2
+        currentFlyingObj.y=35
+        trans=transition.to ( currentFlyingObj, { x=_W/2, y=_H, time=tTime, onComplete=objectMissed } )
+    end
+    
+    if(tType>=4)then
+        currentFlyingObj.x=_W/2
+        currentFlyingObj.y=_H
+        trans=transition.to ( currentFlyingObj, { x=_W/2, y=35, time=tTime, onComplete=objectMissed } )
+    end
+    
+end
+
+local function resumeGenerateTransition(tType,tTime)
     local trans
     transitionType = tType
     if(tType==1)then
@@ -249,23 +284,25 @@ local function startOrResumeGame()
     print ( "startOrResumeGame" )
     playStreamSound()
     if(gamePaused)then
+        gamePaused=false
         --do resume game initialization
         local function computeRemainigDistance()
             if(transitionType==1)then
-                return ((currentFlyingObj.x)/_W)*100
+                return ((currentFlyingObj.x)/_W)
             end   
             if(transitionType==2)then
-                return ((_W-currentFlyingObj.x)/_W)*100
+                return ((_W-currentFlyingObj.x)/_W)
             end
             if(transitionType==3)then
-                return ((currentFlyingObj.y-35)/_H)*100
+                return ((currentFlyingObj.y-35)/_H)
             end
-            if(transitionType==4 and transitionType==5)then
-                return ((_H-currentFlyingObj.y-35)/_H)*100
+            if(transitionType>=4)then
+                return ((_H-currentFlyingObj.y-35)/_H)
             end
         end
         acceptNextSlide=true;
-        currentFlyingObj.trans= transition.to ( currentFlyingObj, { x=0, y=_H/2, time=GAME_LEVELS[levelNumber][3]*computeRemainigDistance(), onComplete=objectMissed } )   
+        --        currentFlyingObj.trans= transition.to ( currentFlyingObj, { x=0, y=_H/2, time=GAME_LEVELS[levelNumber][3]*computeRemainigDistance(), onComplete=objectMissed } )   
+        currentFlyingObj.trans=resumeGenerateTransition(transitionType, GAME_LEVELS[levelNumber][3]*computeRemainigDistance())
     else		
         --do start game initialization
         isEndGame=false
@@ -305,7 +342,7 @@ local function startCountDown()
     end
     timer.performWithDelay ( 800, onCounterChange,3 )
     counterText=display.newText( group, counterValue, _W/2, _H/2, "Century Gothic Bold", 24 )
-    counterText:setTextColor(255, 229, 51)
+    counterText:setTextColor( 255, 204, 0)
 end
 
 --when an incorrect slide is done [ Grant life or Open the dialog box  for game over]
@@ -342,12 +379,27 @@ end
 --update to next level [***]
 local function gotoNextLevel()
     print ( "gotoNextLevel" )
-    levelNumber=levelNumber+1
-    isLifeAvailable=true
-    --lifeIcon.alpha=1		
-    updateBackground()
-    updateScoreBoard()
-    enterObject()
+    local group=scene.view
+    if(levelNumber<30)then
+        levelNumber=levelNumber+1
+        isLifeAvailable=true
+        --lifeIcon.alpha=1
+        if(levelNumber==1 or levelNumber==6 or levelNumber==11)then
+            playStreamSound()
+        end
+        updateBackground()
+        updateScoreBoard()
+        enterObject()
+    else
+        local msgText=display.newText( group,"You are a Pro Player in Chidia Uddi,\nplease wait for updates to get more stuffs.", 5,5, "Comic Strip", 17 )
+        msgText:setTextColor ( 61, 29, 3)
+        msgText.x=_W/2
+        msgText.y=_H/2-20   
+        msgText.alpha = 0
+        msgText.xScale=0.8
+        msgText.yScale=0.8
+        transition.to(msgText, {time = 1500, alpha=1, xScale=1, yScale=1})
+    end
 end
 
 --when an correct slide is done [ Add another object or Update to New Level]
@@ -382,40 +434,6 @@ local function computeSlide(isUpside)
             --audio.play(correctSound)
             playThisSound("correct")
             computeCorrectAnswer()
-        end
-    end
-end
-
-function onSlideEventDone()
-    print ( "onSlideEventDone" )
-    local group=scene.view
-    if(gamePaused==false)then
-        if(event.phase == "begin")then
-            sliderLine=display.newLine(event.xStart, event.yStart, event.xStart, event.yStart)
-            group:insert(sliderLine)
-        end
-        
-        if(event.phase == "moved")then
-            display.remove(sliderLine)
-            sliderLine=display.newLine(event.xStart, event.yStart, event.xStart, event.y)
-            --sliderLine:setFillColor(109, 109, 109,1)
-            sliderLine:setStrokeColor(109, 109, 109)
-            sliderLine.width=15
-            group:insert(sliderLine)
-        end
-        
-        if(event.phase == "cancelled" )then
-            display.remove(sliderLine)
-        end
-        
-        
-        if ( event.phase == "ended" ) then
-            display.remove(sliderLine)
-            if(event.yStart>event.y)then
-                computeSlide(false)
-            else
-                computeSlide(true)
-            end
         end
     end
 end
@@ -505,7 +523,6 @@ function scene:overlayEnded( event )
             Runtime:addEventListener ( "key", onKeyEvent )
             Runtime:addEventListener ( "touch", onSlideEventDone )
             gamePaused=false
-            audio.rewind(SOUND_STREAM_GAME)
             startOrResumeGame()
             --            startCountDown()
         else 
@@ -520,7 +537,6 @@ function scene:overlayEnded( event )
                 playStreamSound()
             else
                 display.remove(lifeIcon)                
-                audio.rewind(SOUND_STREAM_GAME)
                 options = {effect = "fade",time=600 }
                 storyboard.gotoScene("MenuScreen",options)
             end
@@ -533,7 +549,6 @@ function scene:overlayEnded( event )
             startOrResumeGame()
         else
             display.remove(lifeIcon)
-            audio.rewind(SOUND_STREAM_GAME)
             options = {effect = "fade",time=600 }
             storyboard.gotoScene("MenuScreen",options)
         end
@@ -565,23 +580,23 @@ end
 function onSlideEventDone(event)
     local group=scene.view
     if(gamePaused==false and acceptNextSlide==true)then
-        if(event.phase == "begin")then
-            sliderLine=display.newLine(event.xStart, event.yStart, event.xStart, event.yStart)
-            group:insert(sliderLine)
-        end
-        
-        if(event.phase == "moved")then
-            display.remove(sliderLine)
-            sliderLine=display.newLine(event.xStart, event.yStart, event.xStart, event.y)
-            --sliderLine:setFillColor(109, 109, 109,1)
-            sliderLine:setStrokeColor(109, 109, 109)
-            sliderLine.width=15
-            group:insert(sliderLine)
-        end
-        
-        if(event.phase == "cancelled" )then
-            display.remove(sliderLine)
-        end
+        --        if(event.phase == "begin")then
+        --            sliderLine=display.newLine(event.xStart, event.yStart, event.xStart, event.yStart)
+        --            group:insert(sliderLine)
+        --        end
+        --        
+        --        if(event.phase == "moved")then
+        --            display.remove(sliderLine)
+        --            sliderLine=display.newLine(event.xStart, event.yStart, event.xStart, event.y)
+        --            --sliderLine:setFillColor(109, 109, 109,1)
+        --            sliderLine:setStrokeColor(109, 109, 109)
+        --            sliderLine.width=15
+        --            group:insert(sliderLine)
+        --        end
+        --        
+        --        if(event.phase == "cancelled" )then
+        --            display.remove(sliderLine)
+        --        end
         
         
         if ( event.phase == "ended" ) then

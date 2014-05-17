@@ -12,9 +12,12 @@ audio.reserveChannels(2)
 
 local function playStreamSound()
     if(IS_SOUND_ON=="true")then
-        audio.play(SOUND_STREAM_MENU, {channel = 1})
-        audio.setVolume(1, {channel = 1})
-        audio.setVolume(5, {channel = 2})
+        local function resetMusic()
+            audio.rewind(SOUND_STREAM_MENU)
+        end
+        audio.play(SOUND_STREAM_MENU, {channel = 1, loop=-1, onComplete=resetMusic})
+        audio.setVolume(5, {channel = 1})
+        audio.setVolume(10, {channel = 2})
     else
         audio.stop(1)
     end
@@ -138,7 +141,7 @@ function scene:createScene(event)
         soundsButton = display.newImage( "menu_images/sound_off_btn.png")
     end
     
-   
+    
     soundsButton.x=15+(soundsButton.width/2)
     soundsButton.y=15+(soundsButton.width/2)
     soundsButton:addEventListener ( "tap", onSoundChange )

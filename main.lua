@@ -1,5 +1,3 @@
-
-
 _W=display.contentWidth
 _H=display.contentHeight
 
@@ -89,31 +87,80 @@ FLYING_OBJECTS={
     {"menu_images/obj_images/fly_42.png",true},
     {"menu_images/obj_images/dont_fly_42.png",false},      
     {"menu_images/obj_images/fly_43.png",true},
-    {"menu_images/obj_images/dont_fly_43.png",false}     
+    {"menu_images/obj_images/dont_fly_43.png",false},      
+    {"menu_images/obj_images/more_fly_1.png",true},
+    {"menu_images/obj_images/more_dont_fly_1.png",false},      
+    {"menu_images/obj_images/more_fly_2.png",true},
+    {"menu_images/obj_images/more_dont_fly_2.png",false},      
+    {"menu_images/obj_images/more_fly_3.png",true},
+    {"menu_images/obj_images/more_dont_fly_3.png",false},      
+    {"menu_images/obj_images/more_fly_4.png",true},
+    {"menu_images/obj_images/more_dont_fly_4.png",false},      
+    {"menu_images/obj_images/more_fly_5.png",true},
+    {"menu_images/obj_images/more_dont_fly_5.png",false},      
+    {"menu_images/obj_images/more_fly_6.png",true},
+    {"menu_images/obj_images/more_dont_fly_6.png",false},      
+    {"menu_images/obj_images/more_fly_7.png",true},
+    {"menu_images/obj_images/more_dont_fly_7.png",false},      
+    {"menu_images/obj_images/more_fly_8.png",true},
+    {"menu_images/obj_images/more_dont_fly_8.png",false},      
+    {"menu_images/obj_images/more_fly_9.png",true},
+    {"menu_images/obj_images/more_dont_fly_9.png",false},      
+    {"menu_images/obj_images/more_fly_10.png",true},
+    {"menu_images/obj_images/more_dont_fly_10.png",false},      
+    {"menu_images/obj_images/more_fly_11.png",true},
+    {"menu_images/obj_images/more_dont_fly_11.png",false},      
+    {"menu_images/obj_images/more_fly_12.png",true},
+    {"menu_images/obj_images/more_dont_fly_12.png",false},      
+    {"menu_images/obj_images/more_fly_13.png",true},
+    {"menu_images/obj_images/more_dont_fly_13.png",false},      
+    {"menu_images/obj_images/more_fly_14.png",true},
+    {"menu_images/obj_images/more_dont_fly_14.png",false},      
+    {"menu_images/obj_images/more_fly_15.png",true},
+    {"menu_images/obj_images/more_dont_fly_15.png",false},      
+    {"menu_images/obj_images/more_fly_16.png",true},
+    {"menu_images/obj_images/more_dont_fly_16.png",false},      
+    {"menu_images/obj_images/more_fly_17.png",true},
+    {"menu_images/obj_images/more_dont_fly_17.png",false},      
+    {"menu_images/obj_images/more_fly_18.png",true},
+    {"menu_images/obj_images/more_dont_fly_18.png",false},      
+    {"menu_images/obj_images/more_fly_19.png",true},
+    {"menu_images/obj_images/more_dont_fly_19.png",false},
+    {"menu_images/obj_images/more_dont_fly_20.png",false}   
 }
 --TABLE value's are  
 --{ background, maxObjCount, speed, background_audio}
 GAME_LEVELS={
-    {"menu_images/game_bg_2.png", 500, 4200, nil},
-    {"menu_images/game_bg_4.png", 1000,3800, nil},
-    {"menu_images/game_bg_3.png", 1750, 3400, nil},
-    {"menu_images/game_bg_5.png", 2750, 3000, nil},
-    {"menu_images/game_bg_3.png", 4000, 2600, nil},	
-    {"menu_images/game_bg_2.png", 5500, 2400, nil},
-    {"menu_images/game_bg_4.png", 7250, 2300, nil},
-    {"menu_images/game_bg_3.png", 11500, 2200, nil},
-    {"menu_images/game_bg_5.png", 14000, 2100, nil},
-    {"menu_images/game_bg_2.png", 16750, 2000, nil},	
-    {"menu_images/game_bg_1.png", 19750, 1900, nil},
-    {"menu_images/game_bg_4.png", 23250, 1800, nil},
-    {"menu_images/game_bg_3.png", 27250, 1700, nil},
-    {"menu_images/game_bg_5.png", 33000, 1600, nil},
-    {"menu_images/game_bg_2.png", 43000, 1500, nil},	
-    {"menu_images/game_bg_3.png", 54000, 1400, nil},
-    {"menu_images/game_bg_1.png", 65000, 1300, nil},
-    {"menu_images/game_bg_3.png", 77000, 1200, nil},
-    {"menu_images/game_bg_2.png", 88000, 1100, nil},
-    {"menu_images/game_bg_5.png", 100000, 1000, nil},	
+    {"menu_images/game_bg_2.png", 60, 3400, audio.loadStream("audio/temp_low.mp3")},
+    {"menu_images/game_bg_4.png", 140,3300, audio.loadStream("audio/temp_low.mp3")},
+    {"menu_images/game_bg_3.png", 240, 3200,audio.loadStream( "audio/temp_low.mp3")},
+    {"menu_images/game_bg_5.png", 360, 3100, audio.loadStream("audio/temp_low.mp3")},
+    {"menu_images/game_bg_3.png", 500, 3000, audio.loadStream("audio/temp_low.mp3")},
+    {"menu_images/game_bg_2.png", 660, 2900, audio.loadStream("audio/temp_medium.mp3")},
+    {"menu_images/game_bg_4.png", 860, 2800, audio.loadStream("audio/temp_medium.mp3")},
+    {"menu_images/game_bg_3.png", 1110, 2700, audio.loadStream("audio/temp_medium.mp3")},
+    {"menu_images/game_bg_5.png", 1360, 2600, audio.loadStream("audio/temp_medium.mp3")},
+    {"menu_images/game_bg_3.png", 1660, 2500, audio.loadStream("audio/temp_medium.mp3")},	
+    {"menu_images/game_bg_2.png", 1960, 2400, audio.loadStream("audio/temp_high.mp3")},
+    {"menu_images/game_bg_4.png", 2360, 2300, audio.loadStream("audio/temp_high.mp3")},
+    {"menu_images/game_bg_3.png", 2760, 2200, audio.loadStream("audio/temp_high.mp3")},
+    {"menu_images/game_bg_5.png", 3260, 2100, audio.loadStream("audio/temp_high.mp3")},
+    {"menu_images/game_bg_2.png", 3760, 2000, audio.loadStream("audio/temp_high.mp3")},	
+    {"menu_images/game_bg_1.png", 4510, 1900, audio.loadStream("audio/temp_high.mp3")},
+    {"menu_images/game_bg_4.png", 5260, 1800, audio.loadStream("audio/temp_high.mp3")},
+    {"menu_images/game_bg_3.png", 6010, 1700, audio.loadStream("audio/temp_high.mp3")},
+    {"menu_images/game_bg_5.png", 7010, 1600, audio.loadStream("audio/temp_high.mp3")},
+    {"menu_images/game_bg_2.png", 8010, 1500, audio.loadStream("audio/temp_high.mp3")},	
+    {"menu_images/game_bg_3.png", 9010, 1400, audio.loadStream("audio/temp_high.mp3")},
+    {"menu_images/game_bg_1.png", 10010, 1300,audio.loadStream( "audio/temp_high.mp3")},
+    {"menu_images/game_bg_3.png", 10020, 1200, audio.loadStream("audio/temp_high.mp3")},
+    {"menu_images/game_bg_2.png", 10200, 1100, audio.loadStream("audio/temp_high.mp3")},
+    {"menu_images/game_bg_5.png", 20000, 1000, audio.loadStream("audio/temp_high.mp3")},
+    {"menu_images/game_bg_3.png", 30000, 900, audio.loadStream("audio/temp_high.mp3")},
+    {"menu_images/game_bg_1.png", 40000, 800, audio.loadStream("audio/temp_high.mp3")},
+    {"menu_images/game_bg_3.png", 50000, 700, audio.loadStream("audio/temp_high.mp3")},
+    {"menu_images/game_bg_2.png", 60000, 600, audio.loadStream("audio/temp_high.mp3")},
+    {"menu_images/game_bg_5.png", 70000, 500, audio.loadStream("audio/temp_high.mp3")},		
 }
 
 SOUND_BUTTON_CLICK=audio.loadSound("audio/click_sound.mp3")
@@ -122,7 +169,6 @@ SOUND_WRONG_SWIPE=audio.loadSound("audio/wrong_sound.mp3")
 SOUND_COUNT_DOWN=audio.loadSound("audio/countdown_sound.mp3")
 SOUND_END_GAME=audio.loadSound("audio/end_game.mp3")
 
-SOUND_STREAM_GAME=audio.loadStream("audio/game_sound_dummy.mp3")
 SOUND_STREAM_MENU=audio.loadStream("audio/menu_sound_dummy.mp3")
 
 USER_NAME="NoName"
@@ -138,6 +184,11 @@ HIGH_SCORE_2 = 0
 HIGH_SCORE_3 = 0
 HIGH_SCORE_4 = 0
 HIGH_SCORE_5 = 0
+HIGH_SCORE_1_date = ""
+HIGH_SCORE_2_date = ""
+HIGH_SCORE_3_date = ""
+HIGH_SCORE_4_date = ""
+HIGH_SCORE_5_date = ""
 
 PLATFORM_NAME = system.getInfo("platformName")
 local storyboard = require ( "storyboard" )
@@ -175,6 +226,8 @@ function saveHighScore(score)
     if(numScore==0)then
         return
     end
+    local currentDate = os.date( "*t" )
+    local dateStr=currentDate.day.."/"..currentDate.month.."/"..currentDate.year
     if(HIGH_SCORE_1)then
         if(tonumber(HIGH_SCORE_1)>numScore)then
             if(HIGH_SCORE_2)then
@@ -185,44 +238,64 @@ function saveHighScore(score)
                                 if(tonumber(HIGH_SCORE_4)>numScore)then
                                     if(HIGH_SCORE_5)then
                                         if(tonumber(HIGH_SCORE_5)<numScore)then
-                                            databaseBox.highScore_5=tostring(score)                                             
+                                            databaseBox.highScore_5=tostring(score)
+                                            databaseBox.highScore_5_date=dateStr
                                         end
                                     else 
                                         databaseBox.highScore_5=tostring(score) 
+                                        databaseBox.highScore_5_date=dateStr
                                     end
                                 else
                                     databaseBox.highScore_4=tostring(score)
+                                    databaseBox.highScore_4_date=dateStr
                                     databaseBox.highScore_5=HIGH_SCORE_4
+                                    databaseBox.highScore_5_date=HIGH_SCORE_4_date
                                 end
                             else
-                                databaseBox.highScore_4=tostring(score)  
+                                databaseBox.highScore_4=tostring(score)
+                                databaseBox.highScore_4_date=dateStr
                             end
                         else
                             databaseBox.highScore_3=tostring(score)
+                            databaseBox.highScore_3_date=dateStr
                             databaseBox.highScore_4=HIGH_SCORE_3
+                            databaseBox.highScore_4_date=HIGH_SCORE_3_date
                             databaseBox.highScore_5=HIGH_SCORE_4
+                            databaseBox.highScore_5_date=HIGH_SCORE_4_date
                         end
                     else
-                        databaseBox.highScore_3=tostring(score)                        
+                        databaseBox.highScore_3=tostring(score)   
+                        databaseBox.highScore_3_date=dateStr
                     end
                 else
                     databaseBox.highScore_2=tostring(score)
+                    databaseBox.highScore_2_date=dateStr
                     databaseBox.highScore_3=HIGH_SCORE_2
+                    databaseBox.highScore_3_date=HIGH_SCORE_2_date
                     databaseBox.highScore_4=HIGH_SCORE_3
+                    databaseBox.highScore_4_date=HIGH_SCORE_3_date
                     databaseBox.highScore_5=HIGH_SCORE_4
+                    databaseBox.highScore_5_date=HIGH_SCORE_4_date
                 end            
             else
                 databaseBox.highScore_2=tostring(score)
+                databaseBox.highScore_2_date=dateStr
             end
         else
             databaseBox.highScore_1=tostring(score)
+            databaseBox.highScore_1_date=dateStr
             databaseBox.highScore_2=HIGH_SCORE_1
+            databaseBox.highScore_2_date=HIGH_SCORE_1_date
             databaseBox.highScore_3=HIGH_SCORE_2
+            databaseBox.highScore_3_date=HIGH_SCORE_2_date
             databaseBox.highScore_4=HIGH_SCORE_3
+            databaseBox.highScore_4_date=HIGH_SCORE_3_date
             databaseBox.highScore_5=HIGH_SCORE_4
+            databaseBox.highScore_5_date=HIGH_SCORE_4_date
         end
     else
-        databaseBox.highScore_1=tostring(score)
+        databaseBox.highScore_1=tostring(score)        
+        databaseBox.highScore_1_date=dateStr
     end
     databaseBox:save()
 end
@@ -230,29 +303,19 @@ end
 function getHighScore()
     print("getHighScore")
     HIGH_SCORE_1=databaseBox.highScore_1    
-    if(HIGH_SCORE_1)then
-        print("HIGH_SCORE_1 ="..HIGH_SCORE_1)
-    end
+    HIGH_SCORE_1_date=databaseBox.highScore_1_date   
     
     HIGH_SCORE_2=databaseBox.highScore_2    
-    if(HIGH_SCORE_2)then
-        print("HIGH_SCORE_2 ="..HIGH_SCORE_2)
-    end
+    HIGH_SCORE_2_date=databaseBox.highScore_2_date    
     
     HIGH_SCORE_3=databaseBox.highScore_3    
-    if(HIGH_SCORE_3)then
-        print("HIGH_SCORE_3 ="..HIGH_SCORE_3)
-    end
+    HIGH_SCORE_3_date=databaseBox.highScore_3_date    
     
     HIGH_SCORE_4=databaseBox.highScore_4    
-    if(HIGH_SCORE_4)then
-        print("HIGH_SCORE_4 ="..HIGH_SCORE_4)
-    end
+    HIGH_SCORE_4_date=databaseBox.highScore_4_date    
     
     HIGH_SCORE_5=databaseBox.highScore_5
-    if(HIGH_SCORE_5)then
-        print("HIGH_SCORE_5 ="..HIGH_SCORE_5)
-    end
+    HIGH_SCORE_5_date=databaseBox.highScore_5_date
     
     if(HIGH_SCORE_1)then
         return HIGH_SCORE_1

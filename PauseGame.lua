@@ -52,14 +52,14 @@ function scene:enterScene( event )
     local restartGame=display.newImage("menu_images/yes_button.png", _W/2, _H/2)
     restartGame.x=_W/2
     restartGame.y=_H/2+20
-    restartGame.value="resume"
+    restartGame.value="exit"
     restartGame:addEventListener("touch", doClick)
     group:insert(restartGame)
     
     local endGame=display.newImage("menu_images/no_button.png", _W/2, _H/2)
     endGame.x=_W/2
     endGame.y=_H/2+100
-    endGame.value="exit"
+    endGame.value="resume"
     endGame:addEventListener("touch", doClick)
     group:insert(endGame)
     

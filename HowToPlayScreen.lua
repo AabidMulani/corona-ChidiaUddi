@@ -2,14 +2,16 @@ local onButtonClick
 local storyboard= require ( "storyboard" )
 local scene= storyboard.newScene()
 
-
 audio.reserveChannels(2)
 
 local function playStreamSound()
     if(IS_SOUND_ON=="true")then
-        audio.play(SOUND_STREAM_MENU, {channel = 1})
+        local function resetMusic()
+            audio.rewind(SOUND_STREAM_MENU)
+        end
+        audio.play(SOUND_STREAM_MENU, {channel = 1, onComplete=resetMusic})
         audio.setVolume(1, {channel = 1})
-        audio.setVolume(5, {channel = 2})
+        audio.setVolume(10, {channel = 2})
     else
         audio.stop(1)
     end
@@ -35,7 +37,7 @@ function scene:createScene(event)
     msgText:setTextColor(61, 29, 3)
     group:insert(msgText);
     
-    local mainMsgText=display.newText( "In this Game, Images will keep coming on your screen one by one, if \nthe object or character flies, swipe up on the screen, if it does’t\nthen swipe down. Simpe as it is !   ", 10, 40, "Century Gothic", 12 )
+    local mainMsgText=display.newText( "In this Game, Images will keep coming on your screen one by one.\nIf the object or character flies, swipe up on the screen.\nIf it does’t then swipe down.\nSimpe as it is !   ", 10, 40, "Century Gothic", 12 )
     --    mainMsgText.anchorX=0
     --    mainMsgText.anchorY=0
     --    mainMsgText.x=10

@@ -4,14 +4,17 @@ local scene= storyboard.newScene()
 local rankBtn
 local scoreBtn
 local dateBtn
-
+local onKeyEvent
 audio.reserveChannels(2)
 
 local function playStreamSound()
     if(IS_SOUND_ON=="true")then
-        audio.play(SOUND_STREAM_MENU, {channel = 1})
+        local function resetMusic()
+            audio.rewind(SOUND_STREAM_MENU)
+        end
+        audio.play(SOUND_STREAM_MENU, {channel = 1, onComplete=resetMusic})
         audio.setVolume(1, {channel = 1})
-        audio.setVolume(5, {channel = 2})
+        audio.setVolume(10, {channel = 2})
     else
         audio.stop(1)
     end
@@ -110,7 +113,7 @@ end
 
 function scene:enterScene( event )
     local group=self.view
-    --    Runtime:addEventListener( "key", onKeyEvent );
+        Runtime:addEventListener( "key", onKeyEvent );
     playStreamSound()
     getHighScore()
     
@@ -121,12 +124,12 @@ function scene:enterScene( event )
             rank_5:setTextColor(61, 29, 3)
             rank_5.anchorX=0.5
             rank_5.x=80
-            local score_5=display.newText(group, HIGH_SCORE_5, 240, 240,"Century Gothic Bold" , 13)
+            local score_5=display.newText(group, tostring(HIGH_SCORE_5), 240, 240,"Century Gothic Bold" , 13)
             score_5.alpha=0
             score_5:setTextColor(61, 29, 3)
             score_5.anchorX=0.5
             score_5.x=240
-            local date_5=display.newText(group, "##/##/####", 400, 240,"Century Gothic Bold" , 13)
+            local date_5=display.newText(group, tostring(HIGH_SCORE_5_date), 400, 240,"Century Gothic Bold" , 13)
             date_5.alpha=0
             date_5:setTextColor(61, 29, 3)
             date_5.anchorX=0.5
@@ -145,12 +148,12 @@ function scene:enterScene( event )
             rank_4:setTextColor(61, 29, 3)
             rank_4.anchorX=0.5
             rank_4.x=80
-            local score_4=display.newText(group, HIGH_SCORE_4, 240, 200,"Century Gothic Bold" , 13)
+            local score_4=display.newText(group, tostring(HIGH_SCORE_4), 240, 200,"Century Gothic Bold" , 13)
             score_4.alpha=0
             score_4:setTextColor(61, 29, 3)
             score_4.anchorX=0.5
             score_4.x=240
-            local date_4=display.newText(group, "##/##/####", 400, 200,"Century Gothic Bold" , 13)
+            local date_4=display.newText(group, tostring(HIGH_SCORE_4_date), 400, 200,"Century Gothic Bold" , 13)
             date_4.alpha=0
             date_4:setTextColor(61, 29, 3)
             date_4.anchorX=0.5
@@ -169,12 +172,12 @@ function scene:enterScene( event )
             rank_3:setTextColor(61, 29, 3)
             rank_3.anchorX=0.5
             rank_3.x=80
-            local score_3=display.newText(group, HIGH_SCORE_3, 240, 160,"Century Gothic Bold" , 13)
+            local score_3=display.newText(group, tostring(HIGH_SCORE_3), 240, 160,"Century Gothic Bold" , 13)
             score_3.alpha=0
             score_3:setTextColor(61, 29, 3)
             score_3.anchorX=0.5
             score_3.x=240
-            local date_3=display.newText(group, "##/##/####", 400, 160,"Century Gothic Bold" , 13)
+            local date_3=display.newText(group, tostring(HIGH_SCORE_3_date), 400, 160,"Century Gothic Bold" , 13)
             date_3.alpha=0
             date_3:setTextColor(61, 29, 3)
             date_3.anchorX=0.5
@@ -193,12 +196,12 @@ function scene:enterScene( event )
             rank_2:setTextColor(61, 29, 3)
             rank_2.anchorX=0.5
             rank_2.x=80
-            local score_2=display.newText(group, HIGH_SCORE_2, 240, 120,"Century Gothic Bold" , 13)
+            local score_2=display.newText(group, tostring(HIGH_SCORE_2), 240, 120,"Century Gothic Bold" , 13)
             score_2.alpha=0
             score_2:setTextColor(61, 29, 3)
             score_2.anchorX=0.5
             score_2.x=240
-            local date_2=display.newText(group, "##/##/####", 400, 120,"Century Gothic Bold" , 13)
+            local date_2=display.newText(group, tostring(HIGH_SCORE_2_date), 400, 120,"Century Gothic Bold" , 13)
             date_2.alpha=0
             date_2:setTextColor(61, 29, 3)
             date_2.anchorX=0.5
@@ -208,18 +211,26 @@ function scene:enterScene( event )
             transition.to(date_2, {time=100, alpha=1 })           
         end
     end
-    
+    local highScore
+    local highScoreDate
+    if(HIGH_SCORE_1_date)then
+        highScore= tostring(HIGH_SCORE_1)
+        highScoreDate= tostring(HIGH_SCORE_1_date)
+    else
+        highScore= " - "
+        highScoreDate=" - "
+    end
     local rank_1=display.newText(group, "1", 80, 80,"Century Gothic Bold" , 13)
     rank_1.alpha=0
     rank_1:setTextColor(61, 29, 3)
     rank_1.anchorX=0.5
     rank_1.x=80
-    local score_1=display.newText(group, HIGH_SCORE_1, 240, 80,"Century Gothic Bold" , 13)
+    local score_1=display.newText(group, highScore, 240, 80,"Century Gothic Bold" , 13)
     score_1.alpha=0
     score_1:setTextColor(61, 29, 3)
     score_1.anchorX=0.5
     score_1.x=240
-    local date_1=display.newText(group, "##/##/####", 400, 80,"Century Gothic Bold" , 13)
+    local date_1=display.newText(group, highScoreDate, 400, 80,"Century Gothic Bold" , 13)
     date_1.alpha=0
     date_1:setTextColor(61, 29, 3)
     date_1.anchorX=0.5
@@ -258,7 +269,7 @@ function scene:overlayEnded( event )
 end
 
 -- Key listener
-local function onKeyEvent( event )
+function onKeyEvent( event )
     
     if(event.phase == "down" and event.keyName == "back") then
     	playClickSound()
@@ -275,7 +286,6 @@ end
 -- Add the key callback
 
 scene:addEventListener ( "createScene", scene )
-
 scene:addEventListener ( "willEnterScene", scene )
 scene:addEventListener ( "enterScene", scene )
 scene:addEventListener ( "exitScene", scene )
