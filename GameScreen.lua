@@ -12,10 +12,11 @@ local currentFlyingObj=nil
 local isLifeAvailable
 local scoreTxt
 local coinsTxt
-local whiteLine1
+local baseProgressLine
 local progressLine1
 local lifeIcon
 local indicatorCircle
+local coinsLabel
 --refrence all methods
 local enterObject
 local gameOver
@@ -24,6 +25,41 @@ local onKeyEvent
 local acceptNextSlide=true
 local updateHighScore
 local transitionType
+
+
+audio.reserveChannels(2)
+
+local function playStreamSound()
+    if(IS_SOUND_ON=="true")then
+        local function resetMusic()
+            audio.rewind(GAME_LEVELS[levelNumber][4])
+        end
+        audio.play(GAME_LEVELS[levelNumber][4], {channel = 1 , loops=-1,onComplete=resetMusic})
+        audio.setVolume(5, {channel = 1})
+        audio.setVolume(10, {channel = 2})
+    end
+end
+
+local function playThisSound(soundType)
+    if(IS_SOUND_ON=="true")then
+        if(soundType=="click")then
+            audio.play(SOUND_BUTTON_CLICK, {channel = 2})            
+        end
+        if(soundType=="correct")then
+            audio.play(SOUND_CORRECT_SWIPE, {channel = 2})            
+        end
+        if(soundType=="countDown")then
+            audio.play(SOUND_COUNT_DOWN, {channel = 2})            
+        end
+        if(soundType=="wrong")then
+            audio.play(SOUND_WRONG_SWIPE, {channel = 2})            
+        end
+        if(soundType=="endGame")then
+            audio.play(SOUND_END_GAME, {channel = 2})            
+        end
+    end
+end
+
 -- grab the current Level and set corresponding background
 local function updateBackground()
     print ( "updateBackground" )
@@ -31,21 +67,45 @@ local function updateBackground()
     local bgImage=display.newImageRect ( group ,GAME_LEVELS[levelNumber][1] , _W, _H )
     bgImage.x=_W/2
     bgImage.y=_H/2
-    scoreTxt=display.newText( group, "Scores : "..currentScore, _W-10,10, system.native, 16 )
-    scoreTxt.x=_W-(scoreTxt.width-10)
-    scoreTxt.y=15
-    coinsTxt=display.newText( group, "Coins : "..currentCoinCount, 10,10, system.native, 16 )
-    coinsTxt.x=(coinsTxt.width+10)
+    local lifeLabel=display.newText( group,"Life", 10,10, "Century Gothic Bold", 11 )
+    lifeLabel.x=_W/2
+    lifeLabel.y=10
+    
+    local scoreLabel=display.newText( group,"Scores", 5,5, "Century Gothic Bold", 11 )
+    scoreLabel:setTextColor (  255, 204, 0)
+    
+    scoreTxt=display.newText( group, tostring(currentScore), (scoreLabel.width/2)+5,scoreLabel.height+5, "Century Gothic Bold", 12 )
+    scoreTxt.x= (scoreLabel.width/2)+5
+    scoreTxt:setTextColor (  255, 204, 0)
+    
+    coinsTxt=display.newText( group, tostring(currentCoinCount), 10,10, "Century Gothic Bold", 12 )
+    coinsTxt.x=_W-(coinsTxt.width+20)
     coinsTxt.y=15
-    whiteLine1=display.newLine( group ,0, 35, _W, 35)
-    whiteLine1:setStrokeColor ( 246, 244, 255)
-    progressLine1=display.newLine( group ,0, 35, 0, 35 )
-    progressLine1:setStrokeColor ( 255, 16, 37 )
+    coinsTxt:setTextColor ( 255, 204, 0)
+    
+    coinsLabel=display.newImage("menu_images/coins_icon.png")
+    coinsLabel.xScale=0.7
+    coinsLabel.yScale=0.7
+    coinsLabel.x=_W-(coinsTxt.width+(coinsLabel.width/2)+25)
+    coinsLabel.y=15
+    group:insert(coinsLabel)
+    
+    baseProgressLine=display.newImage("menu_images/progressBar_static.png", 10, 45)
+    group:insert(baseProgressLine)
+    
+    progressLine1=display.newImageRect("menu_images/progressBar_dynamic.png", 0, baseProgressLine.height )
+    progressLine1.anchorX=0
+    progressLine1.anchorY=0
+    progressLine1.x=10
+    progressLine1.y=45
+    group:insert(progressLine1)
+    
     if(levelNumber==1)then
-        lifeIcon=display.newImage("menu_images/life_icon_img.png")
-        lifeIcon.x=10+(lifeIcon.width/2)
-        lifeIcon.y=_H-(10+(lifeIcon.height/2))
+        lifeIcon=display.newImage("menu_images/life_icon.png")
+        lifeIcon.x=_W/2
+        lifeIcon.y=32
     end
+    
     if(isLifeAvailable)then
         if(lifeIcon.alpha==0)then
             transition.to(lifeIcon, {time = 800, alpha=1, xScale=1, yScale=1})
@@ -55,9 +115,8 @@ local function updateBackground()
     else
         lifeIcon.alpha=0   
     end
-    updateHighScore()
     group:insert(lifeIcon)
-    group:insert(progressLine1)
+    updateHighScore()
 end
 
 --update the score values and the bottom bar
@@ -66,29 +125,32 @@ local function updateScoreBoard()
     print ( "updateScoreBoard" )
     local value
     local majorValue
-    scoreTxt.text="Scores : " .. currentScore
+    scoreTxt.text=tostring(currentScore)
     if(levelNumber==1)then
         majorValue=GAME_LEVELS[levelNumber][2]
         value=majorValue-(majorValue-currentScore)
-        value=_W*(value/majorValue)
+        value=100*(value/majorValue)
     else
         majorValue=GAME_LEVELS[levelNumber][2]-GAME_LEVELS[levelNumber-1][2]
         value=majorValue-(GAME_LEVELS[levelNumber][2]-currentScore)
-        value=_W*(value/majorValue)
+        value=100*(value/majorValue)
     end
-    print ( value )
-    display.remove( indicatorCircle )
-    display.remove( progressLine1 )
-    progressLine1=display.newLine( group ,0, 35, value, 35 )
-    progressLine1:setStrokeColor ( 255, 16, 37 )
-    indicatorCircle=display.newCircle(group, value, 35, 3)
-    indicatorCircle:setFillColor(255, 16, 37)
+    print ( value/100 )
+    value=value/100
+    display.remove(progressLine1)
+    progressLine1=display.newImageRect("menu_images/progressBar_dynamic.png", baseProgressLine.width*value, baseProgressLine.height )
+    progressLine1.anchorX=0
+    progressLine1.anchorY=0
+    progressLine1.x=10+(baseProgressLine.width*value/2)
+    progressLine1.y=45+(baseProgressLine.height/2)
+    group:insert(progressLine1)
+    
 end
 
 --update the coin values
 local function updateCoinBoard(isIncremented)
     print ( "updateCoinBoard" )
-    if(tonumber(currentCoinCount)<=0)then
+    if(tonumber(currentCoinCount)<0)then
         --end game due to lack of coins
         isEndGame=true
         AVAILABLE_COINS=currentCoinCount
@@ -99,20 +161,26 @@ local function updateCoinBoard(isIncremented)
     else	
         if(isIncremented)then
             --show good animation
-            coinsTxt:setTextColor ( 99, 221, 0)
+            coinsTxt:setTextColor (  255, 204, 0)
         else
             --show danger animation
             coinsTxt:setTextColor ( 245, 0, 25)
+            coinsTxt.xScale=1.8            
+            coinsTxt.yScale=1.8         
+            coinsTxt.alpha=0.4
+            transition.to ( coinsTxt, { alpha = 1, xScale = 1, yScale = 1, time=800, onComplete=objectMissed } )
         end
-        coinsTxt.text="Coins : " .. currentCoinCount
+        coinsTxt.text=tostring(currentCoinCount)
+        coinsLabel.x=_W-(coinsTxt.width+(coinsLabel.width/2)+30)
     end
 end
 
 --when object is missed
 local function objectMissed()
     print ( "objectMissed" )
-    currentCoinCount=currentCoinCount-1
+    currentCoinCount=currentCoinCount-5
     display.remove(currentFlyingObj)
+    playThisSound("wrong")
     if(currentCoinCount>=0)then
         enterObject()
     end
@@ -146,7 +214,36 @@ local function generateTransition(tType,tTime)
         trans=transition.to ( currentFlyingObj, { x=_W/2, y=_H, time=tTime, onComplete=objectMissed } )
     end
     
-    if(tType==4 and tType==5)then
+    if(tType>=4)then
+        currentFlyingObj.x=_W/2
+        currentFlyingObj.y=_H
+        trans=transition.to ( currentFlyingObj, { x=_W/2, y=35, time=tTime, onComplete=objectMissed } )
+    end
+    
+end
+
+local function resumeGenerateTransition(tType,tTime)
+    local trans
+    transitionType = tType
+    if(tType==1)then
+        currentFlyingObj.x=_W
+        currentFlyingObj.y=_H/2
+        trans=transition.to ( currentFlyingObj, { x=0, y=_H/2, time=tTime, onComplete=objectMissed } )
+    end
+    
+    if(tType==2)then
+        currentFlyingObj.x=0
+        currentFlyingObj.y=_H/2
+        trans=transition.to ( currentFlyingObj, { x=_W, y=_H/2, time=tTime, onComplete=objectMissed } )
+    end
+    
+    if(tType==3)then
+        currentFlyingObj.x=_W/2
+        currentFlyingObj.y=35
+        trans=transition.to ( currentFlyingObj, { x=_W/2, y=_H, time=tTime, onComplete=objectMissed } )
+    end
+    
+    if(tType>=4)then
         currentFlyingObj.x=_W/2
         currentFlyingObj.y=_H
         trans=transition.to ( currentFlyingObj, { x=_W/2, y=35, time=tTime, onComplete=objectMissed } )
@@ -185,23 +282,27 @@ end
 --start or resume game
 local function startOrResumeGame()
     print ( "startOrResumeGame" )
+    playStreamSound()
     if(gamePaused)then
+        gamePaused=false
         --do resume game initialization
         local function computeRemainigDistance()
             if(transitionType==1)then
-                return ((currentFlyingObj.x)/_W)*100
+                return ((currentFlyingObj.x)/_W)
             end   
             if(transitionType==2)then
-                return ((_W-currentFlyingObj.x)/_W)*100
+                return ((_W-currentFlyingObj.x)/_W)
             end
             if(transitionType==3)then
-                return ((currentFlyingObj.y-35)/_H)*100
+                return ((currentFlyingObj.y-35)/_H)
             end
-            if(transitionType==4 and transitionType==5)then
-                return ((_H-currentFlyingObj.y-35)/_H)*100
+            if(transitionType>=4)then
+                return ((_H-currentFlyingObj.y-35)/_H)
             end
         end
-        currentFlyingObj.trans= transition.to ( currentFlyingObj, { x=0, y=_H/2, time=GAME_LEVELS[levelNumber][3]*computeRemainigDistance(), onComplete=objectMissed } )   
+        acceptNextSlide=true;
+        --        currentFlyingObj.trans= transition.to ( currentFlyingObj, { x=0, y=_H/2, time=GAME_LEVELS[levelNumber][3]*computeRemainigDistance(), onComplete=objectMissed } )   
+        currentFlyingObj.trans=resumeGenerateTransition(transitionType, GAME_LEVELS[levelNumber][3]*computeRemainigDistance())
     else		
         --do start game initialization
         isEndGame=false
@@ -228,7 +329,7 @@ local function startCountDown()
         print ( "onCounterChange" )
 	
         counterValue=counterValue-1
-	
+	playThisSound("countDown")
         if(counterValue==0)then
             display.remove( counterText )    
             Runtime:addEventListener( "key", onKeyEvent );
@@ -240,8 +341,8 @@ local function startCountDown()
         
     end
     timer.performWithDelay ( 800, onCounterChange,3 )
-    counterText=display.newText( group, counterValue, _W/2, _H/2, system.nativeFont, 24 )
-    counterText:setTextColor(255, 229, 51)
+    counterText=display.newText( group, counterValue, _W/2, _H/2, "Century Gothic Bold", 24 )
+    counterText:setTextColor( 255, 204, 0)
 end
 
 --when an incorrect slide is done [ Grant life or Open the dialog box  for game over]
@@ -256,6 +357,7 @@ local function computeWrongAnswer()
             lifeIcon.yScale=1
             enterObject()
         end
+        playThisSound("wrong")
         --Animate when wrong answer
         transition.to(currentFlyingObj, {time = 800, y=_H-50 ,alpha=0, transition = easing.outQuad})
         transition.to(lifeIcon, {time = 500, alpha=0, xScale=0, yScale=0, rotation=360})
@@ -265,6 +367,7 @@ local function computeWrongAnswer()
         display.remove(currentFlyingObj)
         acceptNextSlide=false
         isEndGame=true
+        playThisSound("endGame")
         AVAILABLE_COINS=currentCoinCount
         Runtime:removeEventListener ( "key", onKeyEvent );
         Runtime:removeEventListener ( "touch", onSlideEventDone )
@@ -276,12 +379,27 @@ end
 --update to next level [***]
 local function gotoNextLevel()
     print ( "gotoNextLevel" )
-    levelNumber=levelNumber+1
-    isLifeAvailable=true
-    --lifeIcon.alpha=1		
-    updateBackground()
-    updateScoreBoard()
-    enterObject()
+    local group=scene.view
+    if(levelNumber<30)then
+        levelNumber=levelNumber+1
+        isLifeAvailable=true
+        --lifeIcon.alpha=1
+        if(levelNumber==1 or levelNumber==6 or levelNumber==11)then
+            playStreamSound()
+        end
+        updateBackground()
+        updateScoreBoard()
+        enterObject()
+    else
+        local msgText=display.newText( group,"You are a Pro Player in Chidia Uddi,\nplease wait for updates to get more stuffs.", 5,5, "Comic Strip", 17 )
+        msgText:setTextColor ( 61, 29, 3)
+        msgText.x=_W/2
+        msgText.y=_H/2-20   
+        msgText.alpha = 0
+        msgText.xScale=0.8
+        msgText.yScale=0.8
+        transition.to(msgText, {time = 1500, alpha=1, xScale=1, yScale=1})
+    end
 end
 
 --when an correct slide is done [ Add another object or Update to New Level]
@@ -303,6 +421,7 @@ end
 --when slide is done in Up or Down direction
 local function computeSlide(isUpside)
     print ( "computeSlide" )
+    acceptNextSlide=false
     if(currentFlyingObj==nil)then
     else
         transition.cancel ( currentFlyingObj.trans )
@@ -313,41 +432,8 @@ local function computeSlide(isUpside)
         else
             --play good sound
             --audio.play(correctSound)
+            playThisSound("correct")
             computeCorrectAnswer()
-        end
-    end
-end
-
-function onSlideEventDone()
-    print ( "onSlideEventDone" )
-    local group=scene.view
-    if(gamePaused==false)then
-        if(event.phase == "begin")then
-            sliderLine=display.newLine(event.xStart, event.yStart, event.xStart, event.yStart)
-            group:insert(sliderLine)
-        end
-        
-        if(event.phase == "moved")then
-            display.remove(sliderLine)
-            sliderLine=display.newLine(event.xStart, event.yStart, event.xStart, event.y)
-            --sliderLine:setFillColor(109, 109, 109,1)
-            sliderLine:setStrokeColor(109, 109, 109)
-            sliderLine.width=15
-            group:insert(sliderLine)
-        end
-        
-        if(event.phase == "cancelled" )then
-            display.remove(sliderLine)
-        end
-        
-        
-        if ( event.phase == "ended" ) then
-            display.remove(sliderLine)
-            if(event.yStart>event.y)then
-                computeSlide(false)
-            else
-                computeSlide(true)
-            end
         end
     end
 end
@@ -355,6 +441,7 @@ end
 --when back button is clicked
 local function onPause()
     print ( "Back Pressed" )
+    playThisSound("click")
     Runtime:removeEventListener ( "key", onKeyEvent );
     Runtime:removeEventListener ( "touch", onSlideEventDone )
     transition.cancel ( currentFlyingObj.trans )
@@ -366,7 +453,7 @@ end
 function scene:createScene(event)
     print ( "scene:createScene" )
     local group=self.view
-    
+    audio.rewind(SOUND_STREAM_MENU)
 end
 
 function scene:enterScene( event )
@@ -412,6 +499,11 @@ end
 function scene:overlayBegan( event )
     print ( "scene:overlayBegan" )
     local group=self.view
+    acceptNextSlide=false
+    
+    audio.fadeOut({time = 500})
+    audio.stopWithDelay(501, {channel = 1})
+    
     if(isEndGame)then
         
     else
@@ -432,6 +524,7 @@ function scene:overlayEnded( event )
             Runtime:addEventListener ( "touch", onSlideEventDone )
             gamePaused=false
             startOrResumeGame()
+            --            startCountDown()
         else 
             if (GAME_OVER_OVERLAY=="coins")then
                 Runtime:addEventListener ( "key", onKeyEvent )
@@ -441,9 +534,10 @@ function scene:overlayEnded( event )
                 updateScoreBoard()
                 GAME_OVER_OVERLAY="none"
                 enterObject()
+                playStreamSound()
             else
-                display.remove(lifeIcon)
-                options = {effect = "fade",time=300 }
+                display.remove(lifeIcon)                
+                options = {effect = "fade",time=600 }
                 storyboard.gotoScene("MenuScreen",options)
             end
         end
@@ -453,10 +547,9 @@ function scene:overlayEnded( event )
             Runtime:addEventListener ( "touch", onSlideEventDone )
             gamePaused=true
             startOrResumeGame()
-            
         else
             display.remove(lifeIcon)
-            options = {effect = "fade",time=300 }
+            options = {effect = "fade",time=600 }
             storyboard.gotoScene("MenuScreen",options)
         end
         
@@ -478,32 +571,32 @@ function updateHighScore()
     print("updateHighScore")
     AVAILABLE_COINS=currentCoinCount;
     saveCoinsCounts(currentCoinCount)
+    saveHighScore(currentScore)
     if(currentScore>tonumber(HIGH_SCORE))then
         HIGH_SCORE=tostring(currentScore)
-        saveHighScore(currentScore)
     end
 end
 
 function onSlideEventDone(event)
     local group=scene.view
     if(gamePaused==false and acceptNextSlide==true)then
-        if(event.phase == "begin")then
-            sliderLine=display.newLine(event.xStart, event.yStart, event.xStart, event.yStart)
-            group:insert(sliderLine)
-        end
-        
-        if(event.phase == "moved")then
-            display.remove(sliderLine)
-            sliderLine=display.newLine(event.xStart, event.yStart, event.xStart, event.y)
-            --sliderLine:setFillColor(109, 109, 109,1)
-            sliderLine:setStrokeColor(109, 109, 109)
-            sliderLine.width=15
-            group:insert(sliderLine)
-        end
-        
-        if(event.phase == "cancelled" )then
-            display.remove(sliderLine)
-        end
+        --        if(event.phase == "begin")then
+        --            sliderLine=display.newLine(event.xStart, event.yStart, event.xStart, event.yStart)
+        --            group:insert(sliderLine)
+        --        end
+        --        
+        --        if(event.phase == "moved")then
+        --            display.remove(sliderLine)
+        --            sliderLine=display.newLine(event.xStart, event.yStart, event.xStart, event.y)
+        --            --sliderLine:setFillColor(109, 109, 109,1)
+        --            sliderLine:setStrokeColor(109, 109, 109)
+        --            sliderLine.width=15
+        --            group:insert(sliderLine)
+        --        end
+        --        
+        --        if(event.phase == "cancelled" )then
+        --            display.remove(sliderLine)
+        --        end
         
         
         if ( event.phase == "ended" ) then
@@ -525,7 +618,6 @@ end
 
 -- Add the key callback
 scene:addEventListener ( "createScene", scene )
-
 scene:addEventListener ( "willEnterScene", scene )
 scene:addEventListener ( "enterScene", scene )
 scene:addEventListener ( "exitScene", scene )

@@ -8,42 +8,30 @@
 -- Copyright 2014 . All Rights Reserved.
 -- 
 
+
+
 settings =
 {
-	orientation =
-	{
-		default = "landscapeRight",
-		supported =
-		{
-			"landscapeRight"
-		},
-	},
-
-	android =
-	{
-		versionCode = "1"
-	},
-
-	androidPermissions =
-	{
-		"android.permission.WRITE_EXTERNAL_STORAGE"
-	},
-
-	iphone =
-	{
-		plist =
-		{
-			UIPrerenderedIcon = true,
-			UIApplicationExitsOnSuspend = false,
-			UIStatusBarHidden = true,
-                        CFBundleIconFile = "Icon.png",
-                        CFBundleIconFiles = {
-                                "Icon.png" , 
-                                "Icon@2x.png" , 
-                                "Icon-72.png"
-                        },
-
-		},
-	},
-
+    orientation =
+    {
+        default = "landscapeRight",
+        supported = { "landscapeLeft", "landscapeRight" },
+    },
+    
+    android =
+    {
+        versionCode = "10"
+    },
+    
+    androidPermissions =
+    {
+        "android.permission.INTERNET",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+    },
+    
+    build =
+    {
+        neverStripDebugInfo = true
+    }
+    
 }
