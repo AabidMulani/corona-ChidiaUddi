@@ -20,18 +20,30 @@ settings =
     
     android =
     {
-        versionCode = "10"
+        versionCode = "11"
     },
     
     androidPermissions =
     {
         "android.permission.INTERNET",
-        "android.permission.WRITE_EXTERNAL_STORAGE"
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.READ_PHONE_STATE",
     },
     
     build =
     {
         neverStripDebugInfo = true
-    }
+    },
+    
+    plugins =
+    {
+        -- key is the name passed to Lua's 'require()'
+        ["CoronaProvider.ads.admob"] =
+        {
+            -- required
+            publisherId = "com.coronalabs",
+        },
+    },  
     
 }

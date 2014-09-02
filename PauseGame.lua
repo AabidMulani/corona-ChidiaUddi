@@ -11,6 +11,7 @@ end
 
 function scene:createScene(event)
     local group=self.view
+    adsObject.show( AD_TYPE, { x=centerX, y=centerY } )
 end
 
 function scene:willEnterScene( event )
@@ -19,7 +20,6 @@ end
 
 function scene:enterScene( event )
     local group=self.view
-    
     local function doClick(event)
         local obj= event.target
         obj.alpha=0.8
@@ -67,7 +67,7 @@ end
 
 function scene:exitScene( event )
     local group=self.view
-    
+    adsObject.hide();
     Runtime:removeEventListener ( "key", onKeyEvent )
     
 end

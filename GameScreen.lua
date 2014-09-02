@@ -25,7 +25,7 @@ local onKeyEvent
 local acceptNextSlide=true
 local updateHighScore
 local transitionType
-
+local computeWrongAnswer
 
 audio.reserveChannels(2)
 
@@ -35,8 +35,6 @@ local function playStreamSound()
             audio.rewind(GAME_LEVELS[levelNumber][4])
         end
         audio.play(GAME_LEVELS[levelNumber][4], {channel = 1 , loops=-1,onComplete=resetMusic})
-        audio.setVolume(5, {channel = 1})
-        audio.setVolume(10, {channel = 2})
     end
 end
 
@@ -178,13 +176,14 @@ end
 --when object is missed
 local function objectMissed()
     print ( "objectMissed" )
-    currentCoinCount=currentCoinCount-5
-    display.remove(currentFlyingObj)
-    playThisSound("wrong")
-    if(currentCoinCount>=0)then
-        enterObject()
-    end
-    updateCoinBoard(false)
+    computeWrongAnswer()
+    --    currentCoinCount=currentCoinCount-5
+    --    display.remove(currentFlyingObj)
+    --    playThisSound("wrong")
+    --    if(currentCoinCount>=0)then
+    --        enterObject()
+    --    end
+    --    updateCoinBoard(false)
 end
 
 local function computeNewObject()
@@ -282,7 +281,7 @@ end
 --start or resume game
 local function startOrResumeGame()
     print ( "startOrResumeGame" )
-    playStreamSound()
+    --    playStreamSound()
     if(gamePaused)then
         gamePaused=false
         --do resume game initialization
@@ -346,7 +345,7 @@ local function startCountDown()
 end
 
 --when an incorrect slide is done [ Grant life or Open the dialog box  for game over]
-local function computeWrongAnswer()
+function computeWrongAnswer()
     print ( "computeWrongAnswer" )
     
     if(isLifeAvailable)then
@@ -384,9 +383,9 @@ local function gotoNextLevel()
         levelNumber=levelNumber+1
         isLifeAvailable=true
         --lifeIcon.alpha=1
-        if(levelNumber==1 or levelNumber==6 or levelNumber==11)then
-            playStreamSound()
-        end
+        --        if(levelNumber==1 or levelNumber==6 or levelNumber==11)then
+        --            playStreamSound()
+        --        end
         updateBackground()
         updateScoreBoard()
         enterObject()
@@ -534,7 +533,7 @@ function scene:overlayEnded( event )
                 updateScoreBoard()
                 GAME_OVER_OVERLAY="none"
                 enterObject()
-                playStreamSound()
+                --                playStreamSound()
             else
                 display.remove(lifeIcon)                
                 options = {effect = "fade",time=600 }

@@ -1,5 +1,7 @@
 _W=display.contentWidth
 _H=display.contentHeight
+centerX = _W/2
+centerY = _H/2
 
 FLYING_OBJECTS={
     {"menu_images/obj_images/fly_1.png",true},
@@ -131,36 +133,29 @@ FLYING_OBJECTS={
 --TABLE value's are  
 --{ background, maxObjCount, speed, background_audio}
 GAME_LEVELS={
-    {"menu_images/game_bg_2.png", 60, 3400, audio.loadStream("audio/temp_low.mp3")},
-    {"menu_images/game_bg_4.png", 140,3300, audio.loadStream("audio/temp_low.mp3")},
-    {"menu_images/game_bg_3.png", 240, 3200,audio.loadStream( "audio/temp_low.mp3")},
-    {"menu_images/game_bg_5.png", 360, 3100, audio.loadStream("audio/temp_low.mp3")},
-    {"menu_images/game_bg_3.png", 500, 3000, audio.loadStream("audio/temp_low.mp3")},
-    {"menu_images/game_bg_2.png", 660, 2900, audio.loadStream("audio/temp_medium.mp3")},
-    {"menu_images/game_bg_4.png", 860, 2800, audio.loadStream("audio/temp_medium.mp3")},
-    {"menu_images/game_bg_3.png", 1110, 2700, audio.loadStream("audio/temp_medium.mp3")},
-    {"menu_images/game_bg_5.png", 1360, 2600, audio.loadStream("audio/temp_medium.mp3")},
-    {"menu_images/game_bg_3.png", 1660, 2500, audio.loadStream("audio/temp_medium.mp3")},	
-    {"menu_images/game_bg_2.png", 1960, 2400, audio.loadStream("audio/temp_high.mp3")},
-    {"menu_images/game_bg_4.png", 2360, 2300, audio.loadStream("audio/temp_high.mp3")},
-    {"menu_images/game_bg_3.png", 2760, 2200, audio.loadStream("audio/temp_high.mp3")},
-    {"menu_images/game_bg_5.png", 3260, 2100, audio.loadStream("audio/temp_high.mp3")},
-    {"menu_images/game_bg_2.png", 3760, 2000, audio.loadStream("audio/temp_high.mp3")},	
-    {"menu_images/game_bg_1.png", 4510, 1900, audio.loadStream("audio/temp_high.mp3")},
-    {"menu_images/game_bg_4.png", 5260, 1800, audio.loadStream("audio/temp_high.mp3")},
-    {"menu_images/game_bg_3.png", 6010, 1700, audio.loadStream("audio/temp_high.mp3")},
-    {"menu_images/game_bg_5.png", 7010, 1600, audio.loadStream("audio/temp_high.mp3")},
-    {"menu_images/game_bg_2.png", 8010, 1500, audio.loadStream("audio/temp_high.mp3")},	
-    {"menu_images/game_bg_3.png", 9010, 1400, audio.loadStream("audio/temp_high.mp3")},
-    {"menu_images/game_bg_1.png", 10010, 1300,audio.loadStream( "audio/temp_high.mp3")},
-    {"menu_images/game_bg_3.png", 10020, 1200, audio.loadStream("audio/temp_high.mp3")},
-    {"menu_images/game_bg_2.png", 10200, 1100, audio.loadStream("audio/temp_high.mp3")},
-    {"menu_images/game_bg_5.png", 20000, 1000, audio.loadStream("audio/temp_high.mp3")},
-    {"menu_images/game_bg_3.png", 30000, 900, audio.loadStream("audio/temp_high.mp3")},
-    {"menu_images/game_bg_1.png", 40000, 800, audio.loadStream("audio/temp_high.mp3")},
-    {"menu_images/game_bg_3.png", 50000, 700, audio.loadStream("audio/temp_high.mp3")},
-    {"menu_images/game_bg_2.png", 60000, 600, audio.loadStream("audio/temp_high.mp3")},
-    {"menu_images/game_bg_5.png", 70000, 500, audio.loadStream("audio/temp_high.mp3")},		
+    {"menu_images/game_bg_2.png", 60, 2200, audio.loadStream("audio/menu_sound_dummy.mp3")},
+    {"menu_images/game_bg_4.png", 140,2100, audio.loadStream("audio/menu_sound_dummy.mp3")},
+    {"menu_images/game_bg_3.png", 240, 2000,audio.loadStream( "audio/menu_sound_dummy.mp3")},
+    {"menu_images/game_bg_5.png", 360, 1900, audio.loadStream("audio/menu_sound_dummy.mp3")},
+    {"menu_images/game_bg_3.png", 500, 1800, audio.loadStream("audio/menu_sound_dummy.mp3")},
+    {"menu_images/game_bg_2.png", 660, 1700, audio.loadStream("audio/menu_sound_dummy.mp3")},
+    {"menu_images/game_bg_4.png", 860, 1600, audio.loadStream("audio/menu_sound_dummy.mp3")},
+    {"menu_images/game_bg_3.png", 1110, 1500, audio.loadStream("audio/menu_sound_dummy.mp3")},
+    {"menu_images/game_bg_5.png", 1360, 1400, audio.loadStream("audio/menu_sound_dummy.mp3")},
+    {"menu_images/game_bg_3.png", 1660, 1300, audio.loadStream("audio/menu_sound_dummy.mp3")},	
+    {"menu_images/game_bg_2.png", 1960, 1200, audio.loadStream("audio/menu_sound_dummy.mp3")},
+    {"menu_images/game_bg_4.png", 2360, 1100, audio.loadStream("audio/menu_sound_dummy.mp3")},
+    {"menu_images/game_bg_3.png", 2760, 1000, audio.loadStream("audio/menu_sound_dummy.mp3")},
+    {"menu_images/game_bg_5.png", 3260, 950, audio.loadStream("audio/menu_sound_dummy.mp3")},
+    {"menu_images/game_bg_2.png", 3760, 900, audio.loadStream("audio/menu_sound_dummy.mp3")},	
+    {"menu_images/game_bg_1.png", 4510, 850, audio.loadStream("audio/menu_sound_dummy.mp3")},
+    {"menu_images/game_bg_4.png", 5260, 800, audio.loadStream("audio/menu_sound_dummy.mp3")},
+    {"menu_images/game_bg_3.png", 6010, 750, audio.loadStream("audio/menu_sound_dummy.mp3")},
+    {"menu_images/game_bg_5.png", 7010, 700, audio.loadStream("audio/menu_sound_dummy.mp3")},
+    {"menu_images/game_bg_2.png", 8010, 650, audio.loadStream("audio/menu_sound_dummy.mp3")},	
+    {"menu_images/game_bg_3.png", 9010, 600, audio.loadStream("audio/menu_sound_dummy.mp3")},
+    {"menu_images/game_bg_1.png", 10010, 550,audio.loadStream( "audio/menu_sound_dummy.mp3")},
+    {"menu_images/game_bg_3.png", 10020, 500, audio.loadStream("audio/menu_sound_dummy.mp3")},
 }
 
 SOUND_BUTTON_CLICK=audio.loadSound("audio/click_sound.mp3")
@@ -191,8 +186,24 @@ HIGH_SCORE_4_date = ""
 HIGH_SCORE_5_date = ""
 
 PLATFORM_NAME = system.getInfo("platformName")
+
+provider = "admob"
+AD_TYPE = "interstitial"
+appID = "ca-app-pub-7327142249671697/6564921366"
 local storyboard = require ( "storyboard" )
 storyboard.purgeOnSceneChange = true
+
+adsObject = require ("ads")
+function adListener( event )
+    local msg = event.response
+    if event.isError then
+        IS_ADD_INIT = false
+    else
+        IS_ADD_INIT = true
+    end
+end
+adsObject.init( provider, appID, adListener )
+
 
 local options = {
     effect = "fade",

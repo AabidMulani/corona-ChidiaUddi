@@ -7,7 +7,6 @@ local storyboard= require ( "storyboard" )
 local scene= storyboard.newScene()
 local onButtonClick
 local initialAnimation
-
 audio.reserveChannels(2)
 
 local function playStreamSound()
@@ -16,8 +15,6 @@ local function playStreamSound()
             audio.rewind(SOUND_STREAM_MENU)
         end
         audio.play(SOUND_STREAM_MENU, {channel = 1, loop=-1, onComplete=resetMusic})
-        audio.setVolume(5, {channel = 1})
-        audio.setVolume(10, {channel = 2})
     else
         audio.stop(1)
     end
@@ -36,6 +33,7 @@ function scene:createScene(event)
     background.y=_H/2
     group:insert(background);
     
+    adsObject.show(AD_TYPE,{x = _W - 100, y=10})
     local birdImg = display.newImage( "menu_images/bird_1_img.png")
     birdImg.x=_W/2-110;
     birdImg.y=35
@@ -182,12 +180,12 @@ end
 function scene:exitScene( event )
     local group=self.view
     
-    
 end
 
 --IMPORTANT
 function scene:didExitScene( event )
     local group=self.view
+    adsObject.hide()
     storyboard.removeScene("MenuScreen");
 end
 
@@ -235,9 +233,12 @@ end
 function onKeyEvent( event )
     
     if(event.phase == "down" and event.keyName == "back") then
-        
-        native.requestExit()
-        
+        if(IS_ADD_INIT == true)then
+            adsObject.show( AD_TYPE, { x=centerX, y=centerY } )
+            IS_ADD_INIT = false
+        else
+            native.requestExit()            
+        end        
         return true
     end
     return false

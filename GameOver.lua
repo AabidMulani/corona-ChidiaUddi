@@ -12,6 +12,7 @@ end
 
 function scene:createScene(event)
     local group=self.view
+    adsObject.show( AD_TYPE, { x=centerX, y=centerY } )
 end
 
 function scene:willEnterScene( event )
@@ -22,7 +23,6 @@ end
 
 function scene:enterScene( event )
     local group=self.view
-    
     local function doClick(event)
         local obj= event.target
         obj.alpha=0.8
@@ -43,14 +43,14 @@ function scene:enterScene( event )
     end
     
     if(tonumber(AVAILABLE_COINS)<200)then
---        local coinsWidget=display.newImage("menu_images/oops_msg.png", _W/2, _H/2)
---        coinsWidget.x=_W/2
---        coinsWidget.y=_H/2-60
---        group:insert(coinsWidget)
-    local msgText=display.newText( group,"OOPS! YOU ARE OUT OF COINS", 5,5, "Comic Strip", 22 )
-    msgText:setTextColor ( 61, 29, 3)
-    msgText.x=_W/2
-    msgText.y=_H/2-60
+        --        local coinsWidget=display.newImage("menu_images/oops_msg.png", _W/2, _H/2)
+        --        coinsWidget.x=_W/2
+        --        coinsWidget.y=_H/2-60
+        --        group:insert(coinsWidget)
+        local msgText=display.newText( group,"OOPS! YOU ARE OUT OF COINS", 5,5, "Comic Strip", 22 )
+        msgText:setTextColor ( 61, 29, 3)
+        msgText.x=_W/2
+        msgText.y=_H/2-60
     else
         local useLife=display.newImage("menu_images/save_me_button.png", _W/2, _H/2)
         useLife.x=_W/2
@@ -64,20 +64,21 @@ function scene:enterScene( event )
     restartGame.x=_W/2
     restartGame.y=_H/2+20
     restartGame.value="restart"
-        restartGame:addEventListener("touch", doClick)
+    restartGame:addEventListener("touch", doClick)
     group:insert(restartGame)
     
     local endGame=display.newImage("menu_images/exit_game_btn.png", _W/2, _H/2)
     endGame.x=_W/2
     endGame.y=_H/2+100
     endGame.value="exit"
-        endGame:addEventListener("touch", doClick)
+    endGame:addEventListener("touch", doClick)
     group:insert(endGame)
     
 end
 
 function scene:exitScene( event )
     local group=self.view
+    adsObject.hide();
     Runtime:removeEventListener( "key", onKeyEvent );
     
 end

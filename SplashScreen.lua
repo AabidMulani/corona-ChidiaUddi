@@ -9,7 +9,7 @@ function scene:createScene(event)
     background.x=_W/2;
     background.y=_H/2
     group:insert(background);
-        
+    
 end
 
 function scene:willEnterScene( event )
@@ -19,11 +19,11 @@ function scene:willEnterScene( event )
 end
 
 local function onChange()
-	
+    
     options = {effect = "fade",time=500}
     storyboard.gotoScene("MenuScreen",options)
-
-   
+    
+    
 end
 
 function scene:enterScene( event )

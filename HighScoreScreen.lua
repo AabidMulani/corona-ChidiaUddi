@@ -1,5 +1,5 @@
 local onButtonClick
-local storyboard= require ( "storyboard" )
+local storyboard= require ("storyboard")
 local scene= storyboard.newScene()
 local rankBtn
 local scoreBtn
@@ -13,8 +13,6 @@ local function playStreamSound()
             audio.rewind(SOUND_STREAM_MENU)
         end
         audio.play(SOUND_STREAM_MENU, {channel = 1, onComplete=resetMusic})
-        audio.setVolume(1, {channel = 1})
-        audio.setVolume(10, {channel = 2})
     else
         audio.stop(1)
     end
@@ -28,7 +26,7 @@ end
 
 function scene:createScene(event)
     local group=self.view
-    
+    adsObject.show( AD_TYPE, { x=centerX, y=centerY } )
     local background = display.newImage( "menu_images/how_to_play_background.png")
     background.x=_W/2
     background.y=_H/2
@@ -108,12 +106,11 @@ end
 function scene:willEnterScene( event )
     local group=self.view
     
-    
 end
 
 function scene:enterScene( event )
     local group=self.view
-        Runtime:addEventListener( "key", onKeyEvent );
+    Runtime:addEventListener( "key", onKeyEvent );
     playStreamSound()
     getHighScore()
     
@@ -246,7 +243,7 @@ end
 
 function scene:didExitScene( event )
     local group=self.view
-    
+    adsObject.hide()
     storyboard.removeScene("HowToPlayScreen");
 end
 
